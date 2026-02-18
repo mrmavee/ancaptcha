@@ -1,0 +1,22 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/ancaptcha",
+    "crates/ancaptcha-ffi",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["Maverick"]
+license = "Apache-2.0"
+repository = "https://git.mrmave.work/maverick/ancaptcha"
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = "symbols"
+codegen-units = 1
+panic = "abort"
+incremental = false
+debug = false

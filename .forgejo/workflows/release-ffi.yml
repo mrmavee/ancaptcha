@@ -1,0 +1,76 @@
+name: Release FFI
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: https://code.forgejo.org/actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Prepare Assets
+        run: |
+          cp dist/libancaptcha_ffi.so* .
+          cp dist/ancaptcha-ffi.h* .
+
+      - name: Install git-cliff
+        run: |
+          curl -sL https://github.com/orhun/git-cliff/releases/download/v2.11.0/git-cliff-2.11.0-x86_64-unknown-linux-gnu.tar.gz -o git-cliff.tar.gz
+          tar -xzf git-cliff.tar.gz
+          sudo mv git-cliff-*/git-cliff /usr/local/bin/
+
+      - name: Generate Release Notes
+        run: git-cliff --config cliff.toml --latest -o CHANGELOG.md
+
+      - name: Create Release
+        run: |
+          BODY=$(cat CHANGELOG.md)
+          EXISTING_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.PACKAGES_TOKEN }}" \
+            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}")
+          RELEASE_ID=$(echo "$EXISTING_RELEASE" | jq -r '.id // empty')
+
+          if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" == "null" ]; then
+            RELEASE_RESPONSE=$(curl -sS -X POST \
+              -H "Authorization: token ${{ secrets.PACKAGES_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "$(jq -n --arg tag "${{ github.ref_name }}" --arg body "$BODY" '{tag_name: $tag, name: $tag, body: $body}')" \
+              "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases")
+            RELEASE_ID=$(echo "$RELEASE_RESPONSE" | jq -r '.id')
+          else
+            echo "Release exists. Cleaning up existing assets..."
+            ASSETS=$(curl -s -H "Authorization: token ${{ secrets.PACKAGES_TOKEN }}" \
+              "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets")
+            for asset_id in $(echo "$ASSETS" | jq -r '.[].id'); do
+              curl -s -X DELETE -H "Authorization: token ${{ secrets.PACKAGES_TOKEN }}" \
+                "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets/$asset_id"
+            done
+          fi
+
+          if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" == "null" ]; then
+            echo "Error: Could not retrieve or create Release ID"
+            exit 1
+          fi
+          
+          for file in libancaptcha_ffi.so* ancaptcha-ffi.h*; do
+            filename=$(basename "$file")
+            content_type="application/octet-stream"
+            [[ "$filename" == *.sha256 || "$filename" == *.asc || "$filename" == *.h ]] && content_type="text/plain"
+            
+            curl -sS --fail -o /dev/null -X POST \
+              -H "Authorization: token ${{ secrets.PACKAGES_TOKEN }}" \
+              -H "Content-Type: $content_type" \
+              --data-binary @"$file" \
+              "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets?name=$filename"
+          done

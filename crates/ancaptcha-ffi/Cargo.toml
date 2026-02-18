@@ -1,0 +1,24 @@
+[package]
+name = "ancaptcha-ffi"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "C-ABI bridge for the anCaptcha engine."
+readme = "README.md"
+keywords = ["captcha", "no-js", "privacy", "ffi", "bindings"]
+categories = ["web-programming", "external-ffi-bindings"]
+include = ["src/**/*", "include/**/*", "tests/**/*", "build.rs", "Cargo.toml", "README.md"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+ancaptcha = { version = "0.1.0", path = "../ancaptcha", registry = "maverick" }
+libc = "0.2.182"
+percent-encoding = "2.3.2"
+tracing = "0.1.44"
+
+[build-dependencies]
+cbindgen = "0.29.2"

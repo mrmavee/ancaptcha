@@ -1,0 +1,2 @@
+[registries]
+maverick = { index = "sparse+https://git.mrmave.work/api/packages/maverick/cargo/" }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>anCaptcha PHP Implementation</title>
+<style>
+body{font-family:sans-serif;margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f0f2f5;padding:20px;box-sizing:border-box}
+.container{background:#fff;max-width:800px;width:100%;padding:40px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.05)}
+h1{border-bottom:2px solid #333;margin-top:0}
+.section{margin:30px 0;padding:20px;background:#f5f5f5;border-radius:8px}
+.section h2{margin-top:0}
+ul{list-style:none;padding:0}
+li{margin:10px 0}
+a{color:#0066cc;text-decoration:none;padding:8px 16px;background:#fff;border:1px solid #ddd;border-radius:4px;display:inline-block;transition:all 0.2s;user-select:none;}
+a:hover{background:#0066cc;color:#fff;transform:translateY(-1px);box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+a:active{transform:translateY(0);scale:0.98;}
+.highlight{background:#fffacd;padding:10px;border-left:4px solid #ff6600;margin:15px 0}
+</style>
+</head>
+<body>
+<div class='container'>
+<h1>anCaptcha PHP Implementation</h1>
+<div class='highlight'>
+<strong>FFI Implementation Test</strong><br>
+This example uses the shared library (.so) via PHP FFI.
+</div>
+<div class='section'>
+<h2>Rotate Captcha</h2>
+<ul>
+<li><a href='?kind=rotate&diff=easy'>Easy</a></li><li><a href='?kind=rotate&diff=medium'>Medium</a></li><li><a href='?kind=rotate&diff=hard'>Hard</a></li>
+</ul>
+</div>
+<div class='section'>
+<h2>Slider Puzzle</h2>
+<ul>
+<li><a href='?kind=slider&diff=easy'>Easy</a></li><li><a href='?kind=slider&diff=medium'>Medium</a></li><li><a href='?kind=slider&diff=hard'>Hard</a></li>
+</ul>
+</div>
+<div class='section'>
+<h2>Find the Pair</h2>
+<ul>
+<li><a href='?kind=pair&diff=easy'>Easy</a></li><li><a href='?kind=pair&diff=medium'>Medium</a></li><li><a href='?kind=pair&diff=hard'>Hard</a></li>
+</ul>
+</div>
+</div>
+</body>
+</html>

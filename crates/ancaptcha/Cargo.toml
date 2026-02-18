@@ -1,0 +1,30 @@
+[package]
+name = "ancaptcha"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "A No-JS, stateless captcha engine designed for darknet and Tor hidden services."
+readme = "README.md"
+keywords = ["captcha", "no-js", "privacy", "ffi"]
+categories = ["web-programming", "security"]
+include = ["src/**/*", "assets/default_images/**/*", "tests/**/*", "build.rs", "Cargo.toml", "README.md"]
+
+[dependencies]
+base64 = "0.22.1"
+bincode-next = "2.0.5"
+chacha20poly1305 = "0.10.1"
+html-escape = "0.2.13"
+image = { version = "0.25.9", default-features = false, features = ["jpeg", "webp"] }
+rand = "0.10.0"
+rayon = "1.11.0"
+serde = { version = "1.0.228", features = ["derive"] }
+subtle = "2.6.1"
+thiserror = "2.0.18"
+
+[build-dependencies]
+image = { version = "0.25.9", default-features = false, features = ["jpeg", "webp"] }
+
+[dev-dependencies]
+proptest = "1.10.0"

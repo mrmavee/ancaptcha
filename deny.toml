@@ -1,0 +1,53 @@
+[graph]
+all-features = true
+
+[advisories]
+db-urls = ["https://github.com/rustsec/advisory-db"]
+unmaintained = "workspace"
+unsound = "all"
+yanked = "deny"
+ignore = []
+
+[licenses]
+confidence-threshold = 0.93
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "BSD-3-Clause",
+    "ISC",
+    "MPL-2.0",
+    "Unicode-3.0",
+]
+
+[[licenses.clarify]]
+name = "ring"
+expression = "ISC"
+license-files = [
+    { path = "LICENSE", hash = 0xbd0ced23 }
+]
+
+[bans]
+multiple-versions = "deny"
+wildcards = "deny"
+highlight = "all"
+allow = []
+deny = []
+skip = [
+    { name = "chacha20", version = "0.9.1" },
+    { name = "chacha20", version = "0.10.0" },
+    { name = "cpufeatures", version = "0.2.17" },
+    { name = "cpufeatures", version = "0.3.0" },
+    { name = "getrandom", version = "0.2.17" },
+    { name = "getrandom", version = "0.4.1" },
+    { name = "rand_core", version = "0.6.4" },
+    { name = "rand_core", version = "0.10.0" },
+    { name = "windows-sys", version = "0.60.2" },
+    { name = "windows-sys", version = "0.61.2" },
+]
+skip-tree = []
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []
