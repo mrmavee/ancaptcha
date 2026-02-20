@@ -174,8 +174,9 @@ fn asset_integrity_checks() {
     let bundle2 = captcha.generate_rotate(None).unwrap();
 
     assert_ne!(bundle1.html, bundle2.html);
-    assert_ne!(bundle1.css, bundle2.css);
-    assert!(bundle1.css.contains("data:image/jpeg;base64,"));
+    assert_eq!(bundle1.css, "");
+    assert!(bundle1.html.contains("<style>"));
+    assert!(bundle1.html.contains("data:image/jpeg;base64,"));
 }
 
 #[test]

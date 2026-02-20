@@ -74,6 +74,11 @@ fn ffi_e2e_rotate() {
             Status::Ok as i32
         );
 
+        let cow_h = CStr::from_ptr(ptr_h).to_string_lossy();
+        let cow_c = CStr::from_ptr(ptr_c).to_string_lossy();
+        assert!(cow_h.contains("<style>"));
+        assert_eq!(cow_c, "");
+
         let cow_t = CStr::from_ptr(ptr_t).to_string_lossy();
         let token_bytes = ancaptcha::common::b64_decode_url_safe(cow_t.as_ref()).unwrap();
         let plaintext = ancaptcha::crypto::cipher::decrypt(&TEST_SECRET, &token_bytes).unwrap();
@@ -115,6 +120,11 @@ fn ffi_e2e_slider() {
             Status::Ok as i32
         );
 
+        let cow_h = CStr::from_ptr(ptr_h).to_string_lossy();
+        let cow_c = CStr::from_ptr(ptr_c).to_string_lossy();
+        assert!(cow_h.contains("<style>"));
+        assert_eq!(cow_c, "");
+
         let cow_t = CStr::from_ptr(ptr_t).to_string_lossy();
         let token_bytes = ancaptcha::common::b64_decode_url_safe(cow_t.as_ref()).unwrap();
         let plaintext = ancaptcha::crypto::cipher::decrypt(&TEST_SECRET, &token_bytes).unwrap();
@@ -154,6 +164,11 @@ fn ffi_e2e_pair() {
             ),
             Status::Ok as i32
         );
+
+        let cow_h = CStr::from_ptr(ptr_h).to_string_lossy();
+        let cow_c = CStr::from_ptr(ptr_c).to_string_lossy();
+        assert!(cow_h.contains("<style>"));
+        assert_eq!(cow_c, "");
 
         let cow_t = CStr::from_ptr(ptr_t).to_string_lossy();
         let token_bytes = ancaptcha::common::b64_decode_url_safe(cow_t.as_ref()).unwrap();

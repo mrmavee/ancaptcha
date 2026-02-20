@@ -52,6 +52,10 @@ pub fn generate_full_captcha(request: &mut CaptchaRequest) -> (String, String) {
     let error_class = mapper.get_or_create("error");
     let hidden_class = mapper.get_or_create("h");
     let token_name = mapper.get_or_create("token");
+    let checkbox_inner = mapper.get_or_create("cb");
+    let captcha_text = mapper.get_or_create("ct");
+    let logo_wrapper = mapper.get_or_create("lo");
+    let logo_icon = mapper.get_or_create("li");
 
     let ids = ObfuscatedIds {
         container_id: &container_id,
@@ -61,6 +65,10 @@ pub fn generate_full_captcha(request: &mut CaptchaRequest) -> (String, String) {
         error_class: &error_class,
         hidden_class: &hidden_class,
         token_name: &token_name,
+        checkbox_inner: &checkbox_inner,
+        captcha_text: &captcha_text,
+        logo_wrapper: &logo_wrapper,
+        logo_icon: &logo_icon,
     };
 
     let initial_config = InitialStateConfig {
@@ -138,7 +146,9 @@ pub fn generate_full_captcha(request: &mut CaptchaRequest) -> (String, String) {
     let minified_html = minify_html(&full_html);
     let minified_css = minify_css(&full_css);
 
-    (minified_html, minified_css)
+    let combined_html = format!("<style>{minified_css}</style>{minified_html}");
+
+    (combined_html, String::new())
 }
 
 #[cfg(test)]
@@ -163,10 +173,11 @@ mod tests {
             error_message: None,
         };
 
-        let (_html, css) = generate_full_captcha(&mut request);
-        assert!(!css.is_empty());
-        assert!(css.contains("data:image/jpeg;base64,a"));
-        assert!(css.contains("data:image/jpeg;base64,b"));
+        let (html, css) = generate_full_captcha(&mut request);
+        assert!(css.is_empty());
+        assert!(html.contains("<style>"));
+        assert!(html.contains("data:image/jpeg;base64,a"));
+        assert!(html.contains("data:image/jpeg;base64,b"));
     }
 
     #[test]
@@ -188,10 +199,12 @@ mod tests {
             error_message: None,
         };
 
-        let (_html, css) = generate_full_captcha(&mut request);
-        assert!(css.contains("data:image/jpeg;base64,main"));
-        assert!(css.contains("data:image/jpeg;base64,piece"));
-        assert!(css.contains("transform:translateX("));
+        let (html, css) = generate_full_captcha(&mut request);
+        assert!(css.is_empty());
+        assert!(html.contains("<style>"));
+        assert!(html.contains("data:image/jpeg;base64,main"));
+        assert!(html.contains("data:image/jpeg;base64,piece"));
+        assert!(html.contains("transform:translateX("));
     }
 
     #[test]
@@ -212,8 +225,10 @@ mod tests {
             error_message: None,
         };
 
-        let (_html, css) = generate_full_captcha(&mut request);
-        assert!(css.contains("data:image/jpeg;base64,p1"));
-        assert!(css.contains("display:grid"));
+        let (html, css) = generate_full_captcha(&mut request);
+        assert!(css.is_empty());
+        assert!(html.contains("<style>"));
+        assert!(html.contains("data:image/jpeg;base64,p1"));
+        assert!(html.contains("display:grid"));
     }
 }

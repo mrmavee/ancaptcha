@@ -15,7 +15,7 @@ include = ["src/**/*", "include/**/*", "tests/**/*", "build.rs", "Cargo.toml", "
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-ancaptcha = { version = "0.1.0", path = "../ancaptcha", registry = "maverick" }
+ancaptcha = { version = "0.1.1", path = "../ancaptcha", registry = "maverick" }
 libc = "0.2.182"
 percent-encoding = "2.3.2"
 tracing = "0.1.44"

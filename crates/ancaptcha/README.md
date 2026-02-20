@@ -11,22 +11,43 @@ This crate provides the core logic for:
 
 ## Usage
 
+### 1. Initialize Asset Cache
+It is recommended to initialize and warm up the cache during startup. Since warming up involves heavy image processing, use a blocking task if in an async environment. You can warm up only the styles you intend to use.
+
 ```rust
-use ancaptcha::{AnCaptcha, Config, init_cache, CaptchaStyle};
+use ancaptcha::{init_cache, CaptchaStyle};
 
-// 1. Initialize global asset cache (recommended on startup)
 let cache = init_cache();
-cache.warm_up(CaptchaStyle::Rotate);
+// Recommended: Warm up only the styles you need in a background thread
+std::thread::spawn(move || {
+    cache.warm_up(CaptchaStyle::Rotate);
+    // cache.warm_up(CaptchaStyle::Slider);
+    // cache.warm_up(CaptchaStyle::Pair);
+});
+```
 
-// 2. Setup engine with 32-byte secret
-let secret = [0u8; 32]; // Use a secure key from env
-let ac = AnCaptcha::new(Config::new(secret));
+### 2. Generate a Challenge
+Initialize the engine with a 32-byte secret key (e.g., from an environment variable).
 
-// 3. Generate a challenge
-let bundle = ac.generate_rotate(None).expect("Failed to generate");
+```rust
+use ancaptcha::{AnCaptcha, Config, Difficulty};
 
-// bundle.html -> The CSS-only captcha form
-// bundle.token -> Encrypted state to be echoed in the form submission
+let secret = [0u8; 32]; // Replace with real secret
+let ac = AnCaptcha::new(Config::new(secret).with_difficulty(Difficulty::Medium));
+
+// Choose your style: generate_rotate, generate_slider, or generate_pair
+let bundle = ac.generate_slider(None).expect("Failed to generate");
+
+// bundle.html contains the combined HTML and CSS <style> block
+// bundle.token must be included in your form submission
+```
+
+### 3. Verify Submission
+You can verify the raw form-data directly (automatic) or verify individual values.
+
+```rust
+// Automatic verification from a HashMap<String, Vec<String>>
+let is_valid = ac.verify_request(&form_map).unwrap_or(false);
 ```
 
 ## Features

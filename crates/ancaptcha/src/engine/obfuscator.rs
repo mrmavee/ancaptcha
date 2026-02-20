@@ -71,6 +71,10 @@ impl NameMapper {
             "error",
             "h",
             "token",
+            "cb",
+            "ct",
+            "lo",
+            "li",
         ];
         for s in core {
             let _ = self.get_or_create(s);

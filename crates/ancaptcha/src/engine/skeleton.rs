@@ -17,6 +17,10 @@ pub struct ObfuscatedIds<'a> {
     pub error_class: &'a str,
     pub hidden_class: &'a str,
     pub token_name: &'a str,
+    pub checkbox_inner: &'a str,
+    pub captcha_text: &'a str,
+    pub logo_wrapper: &'a str,
+    pub logo_icon: &'a str,
 }
 
 impl Default for ObfuscatedIds<'_> {
@@ -29,6 +33,10 @@ impl Default for ObfuscatedIds<'_> {
             error_class: "e",
             hidden_class: "h",
             token_name: "_t",
+            checkbox_inner: "cb",
+            captcha_text: "ct",
+            logo_wrapper: "lo",
+            logo_icon: "li",
         }
     }
 }
@@ -48,7 +56,7 @@ pub fn generate_initial_state(config: &InitialStateConfig) -> String {
         );
     }
 
-    let _ = write!(html, r#"<div id="{}" class="an-c">"#, ids.container_id);
+    let _ = write!(html, r#"<div id="{}">"#, ids.container_id);
 
     let _ = write!(
         html,
@@ -70,7 +78,8 @@ pub fn generate_initial_state(config: &InitialStateConfig) -> String {
 
     let _ = write!(
         html,
-        r#"<span class="cb"></span><span class="ct">I'm not a robot</span><div class="lo"><div class="li"></div>an<span>Captcha</span></div>"#
+        r#"<span class="{}"></span><span class="{}">I'm not a robot</span><div class="{}"><div class="{}"></div>an<span>Captcha</span></div>"#,
+        ids.checkbox_inner, ids.captcha_text, ids.logo_wrapper, ids.logo_icon
     );
 
     let _ = write!(html, r"</label>");
@@ -94,6 +103,10 @@ mod tests {
                 error_class: "e",
                 hidden_class: "h",
                 token_name: "_t",
+                checkbox_inner: "cb",
+                captcha_text: "ct",
+                logo_wrapper: "lo",
+                logo_icon: "li",
             },
         };
 
@@ -101,7 +114,6 @@ mod tests {
 
         assert!(html.contains("I'm not a robot"));
         assert!(html.contains(r#"type="checkbox""#));
-        assert!(!html.contains(r#"class="e""#));
         assert!(html.contains(r#"class="h""#));
     }
 
@@ -117,6 +129,10 @@ mod tests {
                 error_class: "e",
                 hidden_class: "h",
                 token_name: "_t",
+                checkbox_inner: "cb",
+                captcha_text: "ct",
+                logo_wrapper: "lo",
+                logo_icon: "li",
             },
         };
 
@@ -143,6 +159,10 @@ mod tests {
                 error_class: "e4",
                 hidden_class: "h5",
                 token_name: "t6",
+                checkbox_inner: "cb7",
+                captcha_text: "ct8",
+                logo_wrapper: "lo9",
+                logo_icon: "li0",
             },
         };
 
@@ -153,5 +173,9 @@ mod tests {
         assert!(html.contains(r#"id="c9""#));
         assert!(html.contains(r#"class="z3""#));
         assert!(html.contains(r#"class="h5""#));
+        assert!(html.contains(r#"class="cb7""#));
+        assert!(html.contains(r#"class="ct8""#));
+        assert!(html.contains(r#"class="lo9""#));
+        assert!(html.contains(r#"class="li0""#));
     }
 }

@@ -4,19 +4,32 @@ C-ABI bridge for the anCaptcha engine. This crate provides the foreign function 
 
 ## Distribution
 
-The C header file and compiled libraries are typically distributed via the main repository's `dist/` directory.
+The C header file and compiled libraries are distributed via the repository's `dist/` directory.
 
 ## FFI API Snapshot
 
+### Configuration
 ```c
-// Initialize configuration and global cache
-Status anCaptcha_set_config(const char* secret_hex);
+// Initialize configuration with 32-byte secret and global asset warming
+Status anCaptcha_set_config(const uint8_t* secret_bytes, bool warm_up);
+```
 
-// Generate challenges
-Status anCaptcha_generate_rotate(const char* error_msg, CaptchaBundle* out);
+### Generation
+```c
+// Generate challenges (difficulty: 0=Easy, 1=Medium, 2=Hard)
+// Memory for strings must be freed using anCaptcha_free_string
+Status anCaptcha_generate_rotate(int32_t difficulty, const char* error_msg, char** token_out, char** html_out, char** css_out);
+Status anCaptcha_generate_slider(int32_t difficulty, const char* error_msg, char** token_out, char** html_out, char** css_out);
+Status anCaptcha_generate_pair(int32_t difficulty, const char* error_msg, char** token_out, char** html_out, char** css_out);
+```
 
-// Automatic request verification (scans form-data/HashMap equivalents)
-Status anCaptcha_verify_auto(const char* secret_hex, char** keys, char*** vals, size_t keys_len, bool* out);
+### Verification
+```c
+// Automatic verification from URL-encoded form data
+Status anCaptcha_verify_auto(const char* form_data_urlencoded);
+
+// Manual verification
+Status anCaptcha_verify_rotate(const char* token, const char** values, size_t values_len);
 ```
 
 ## Integration

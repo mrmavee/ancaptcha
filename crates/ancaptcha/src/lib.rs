@@ -1,7 +1,7 @@
 //! anCaptcha: A No-JS, stateless captcha engine implemented in Rust for cross-language integration.
 //!
-//! Originally designed for the darknet, specifically for Tor hidden services, to provide human 
-//! verification without requiring JavaScript. It uses authenticated encryption (ChaCha20-Poly1305) 
+//! Originally designed for the darknet, specifically for Tor hidden services, to provide human
+//! verification without requiring JavaScript. It uses authenticated encryption (ChaCha20-Poly1305)
 //! to store challenge state in tokens, eliminating the need for server-side sessions.
 //!
 //! (c) 2026 Maverick. Licensed under Apache License, Version 2.0.
