@@ -168,11 +168,11 @@ pub fn generate_slider_css(config: &mut SliderConfig) -> String {
 
     let _ = write!(
         css,
-        ".{target_class}{{position:absolute !important;width:50px !important;height:50px !important;background:rgba(0,0,0,0.4) !important;border-radius:2px !important;box-shadow:inset 0 0 8px #fff,0 0 5px rgba(255,255,255,0.5) !important;z-index:1 !important;}}"
+        ".{target_class}{{position:absolute !important;width:50px !important;height:50px !important;background:rgba(0,0,0,0.6) !important;box-shadow:0 0 0 1px rgba(0,0,0,0.6),inset 0 0 5px rgba(0,0,0,0.9) !important;z-index:1 !important;}}"
     );
     let _ = write!(
         css,
-        ".{piece_img_class}{{position:absolute !important;left:0 !important;width:50px !important;height:50px !important;transition:transform 0.3s !important;filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 5px rgba(255,255,255,0.5)) !important;z-index:2 !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;background-size:cover !important;}}"
+        ".{piece_img_class}{{position:absolute !important;left:0 !important;width:50px !important;height:50px !important;transition:transform 0.3s !important;box-shadow:0 0 3px rgba(0,0,0,0.7) !important;z-index:2 !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;background-size:cover !important;}}"
     );
 
     let track_class = config.mapper.get_or_create("track");
