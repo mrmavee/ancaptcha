@@ -1,6 +1,10 @@
-.PHONY: all build assets test lint coverage clean env
+.PHONY: all build assets test lint coverage clean env fuzz fuzz-all fuzz-stress-all stress fuzz-lint report $(FUZZ_TARGETS) $(addprefix fuzz-,$(FUZZ_TARGETS)) $(addprefix fuzz-stress-,$(FUZZ_TARGETS)) $(addprefix fuzz-cmin-,$(FUZZ_TARGETS))
 
-all: lint test build
+FUZZ_TARGETS := token_payload verify_request submissions
+FUZZ_FLAGS ?= -runs=10000
+HOURS ?= 2
+
+all: lint test build fuzz
 
 env:
 	@if [ ! -f .env ]; then \
@@ -17,7 +21,13 @@ build: assets
 test: env
 	@cargo nextest run --all-features --workspace
 
-lint:
+fuzz-lint:
+	@cd fuzz && cargo clippy --all-features --all-targets -- -D warnings -D clippy::pedantic -D clippy::nursery -D clippy::all
+
+report: fuzz-cmin
+	@cd fuzz && ./sync_report.sh
+
+lint: fuzz-lint
 	@cargo fmt --all -- --check
 	@cargo clippy --all-features --all-targets -- -D warnings -D clippy::pedantic -D clippy::nursery
 
@@ -36,3 +46,30 @@ coverage: env
 clean:
 	@cargo clean
 	@rm -f lcov.info
+
+$(FUZZ_TARGETS):
+	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $@ -- $(FUZZ_FLAGS)
+
+fuzz: fuzz-all
+
+fuzz-all: $(FUZZ_TARGETS)
+
+$(addprefix fuzz-,$(FUZZ_TARGETS)): fuzz-%:
+	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $* -- $(FUZZ_FLAGS)
+
+fuzz-stress-all:
+	@STRESS_SEC=$$(($(HOURS) * 3600)); \
+	$(MAKE) fuzz-all FUZZ_FLAGS="-max_total_time=$$STRESS_SEC"
+
+stress: fuzz-stress-all
+
+fuzz-cmin-all: $(addprefix fuzz-cmin-,$(FUZZ_TARGETS))
+
+fuzz-cmin: fuzz-cmin-all
+
+$(addprefix fuzz-cmin-,$(FUZZ_TARGETS)): fuzz-cmin-%:
+	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz cmin $*
+
+$(addprefix fuzz-stress-,$(FUZZ_TARGETS)): fuzz-stress-%:
+	@STRESS_SEC=$$(($(HOURS) * 3600)); \
+	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $* -- -max_total_time=$$STRESS_SEC

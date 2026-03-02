@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "crates/ancaptcha",
     "crates/ancaptcha-ffi",
+    "fuzz",
 ]
 
 [workspace.package]
@@ -20,3 +21,4 @@ codegen-units = 1
 panic = "abort"
 incremental = false
 debug = false
+

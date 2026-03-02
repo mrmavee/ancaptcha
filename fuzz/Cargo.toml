@@ -1,0 +1,39 @@
+[package]
+name = "ancaptcha-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+ancaptcha= { version = "0.1.1", path = "../crates/ancaptcha" }
+arbitrary = { version = "1.4.2", features = ["derive"] }
+libfuzzer-sys = "0.4"
+
+[[bin]]
+name = "token_payload"
+path = "fuzz_targets/token_payload.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "verify_request"
+path = "fuzz_targets/verify_request.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "submissions"
+path = "fuzz_targets/submissions.rs"
+test = false
+doc = false
+bench = false
+
+[profile.release]
+lto = false
+strip = "none"
+panic = "unwind"
