@@ -22,8 +22,7 @@ jobs:
 
       - name: Prepare Assets
         run: |
-          cp dist/libancaptcha_ffi.so* .
-          cp dist/ancaptcha-ffi.h* .
+          cp dist/*.tar.gz* .
 
       - name: Install git-cliff
         run: |
@@ -63,10 +62,10 @@ jobs:
             exit 1
           fi
           
-          for file in libancaptcha_ffi.so* ancaptcha-ffi.h*; do
+          for file in *.tar.gz*; do
             filename=$(basename "$file")
             content_type="application/octet-stream"
-            [[ "$filename" == *.sha256 || "$filename" == *.asc || "$filename" == *.h ]] && content_type="text/plain"
+            [[ "$filename" == *.sha256 || "$filename" == *.asc ]] && content_type="text/plain"
             
             curl -sS --fail -o /dev/null -X POST \
               -H "Authorization: token ${{ secrets.PACKAGES_TOKEN }}" \

@@ -1,6 +1,6 @@
 # anCaptcha
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![Version](https://img.shields.io/badge/version-0.1.2-blue)
 ![License](https://img.shields.io/badge/license-Apache--2.0-green)
 ![Coverage](assets/badges/coverage.png)
 
@@ -76,7 +76,9 @@ Default values for the `Layout` struct and `anCaptcha_set_layout`:
 | `padding` | `0.5rem 0.9rem` | Container padding. |
 | `checkbox_size` | `1.2rem` | Custom checkbox dimensions. |
 
-## Installation
+## Installation (Rust)
+
+*If you are not using Rust, skip directly to the **[Pre-built Library](#pre-built-library-go-python-php)** section below.*
 
 ### From Crates.io
 ```bash
@@ -124,96 +126,62 @@ make assets
 make build
 ```
 
-## Download and Verify Artifacts
+## Pre-built Library (Go, Python, PHP)
 
 Pre-built binaries, headers, and signatures are available in the `dist/` directory or via [Releases](https://git.mrmave.work/maverick/ancaptcha/releases).
 
-### 1. Import Public Key
+### 1. TL;DR Quick Setup (Wrappers)
+
+Extract the FFI library and header, then download the wrapper for your language. Place all three files together in your project.
+
+**Go**
+```bash
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
+tar -xzf ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
+cp ancaptcha-ffi-v0.1.2-linux-x86_64/libancaptcha_ffi.so ./
+cp ancaptcha-ffi-v0.1.2-linux-x86_64/ancaptcha-ffi.h ./
+wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/go/ancaptcha/ancaptcha.go
+```
+
+**Python**
+```bash
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
+tar -xzf ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
+cp ancaptcha-ffi-v0.1.2-linux-x86_64/libancaptcha_ffi.so ./
+cp ancaptcha-ffi-v0.1.2-linux-x86_64/ancaptcha-ffi.h ./
+wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/python/ancaptcha.py
+```
+
+**PHP**
+```bash
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
+tar -xzf ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
+cp ancaptcha-ffi-v0.1.2-linux-x86_64/libancaptcha_ffi.so ./
+cp ancaptcha-ffi-v0.1.2-linux-x86_64/ancaptcha-ffi.h ./
+wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/php/AnCaptcha.php
+```
+
+*(Note: Replace `wget https://...` with `torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/...` if accessing via Tor).*
+
+### 2. Manual Verification (Recommended)
+
+Verify the release signatures before extraction to ensure cryptographic integrity.
 
 ```bash
-# WKD
+# 1. Import Key
 gpg --locate-keys mail@mrmave.work
 
-# OR
+# 2. Download Artifacts and Signatures
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz.sha256
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz.asc
 
-# Origin
-wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/maverick.asc
+# 3. Verify
+sha256sum -c ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz.sha256
+gpg --verify ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz.asc ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
 
-# Tor
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/maverick.asc
-
-gpg --import maverick.asc
-```
-
-### 2. Download Artifacts
-
-#### libancaptcha_ffi.so
-```bash
-# Origin
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.0/libancaptcha_ffi.so
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.0/libancaptcha_ffi.so.sha256
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.0/libancaptcha_ffi.so.asc
-
-# Tor
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/libancaptcha_ffi.so
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/libancaptcha_ffi.so.sha256
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/libancaptcha_ffi.so.asc
-```
-
-#### ancaptcha-ffi.h
-```bash
-# Origin
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.0/ancaptcha-ffi.h
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.0/ancaptcha-ffi.h.sha256
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.0/ancaptcha-ffi.h.asc
-
-# Tor
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/ancaptcha-ffi.h
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/ancaptcha-ffi.h.sha256
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/ancaptcha-ffi.h.asc
-```
-
-### 3. Verify Artifacts
-
-```bash
-# Verify Checksums
-sha256sum -c libancaptcha_ffi.so.sha256
-sha256sum -c ancaptcha-ffi.h.sha256
-
-# Verify Signatures
-gpg --verify libancaptcha_ffi.so.asc libancaptcha_ffi.so
-gpg --verify ancaptcha-ffi.h.asc ancaptcha-ffi.h
-```
-
-### 4. Language Wrappers (Go, Python, PHP)
-
-Only these three languages are officially supported with pre-built wrappers.
-
-#### Go
-```bash
-# Origin
-wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/go/ancaptcha/ancaptcha.go
-
-# Tor
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/examples/go/ancaptcha/ancaptcha.go
-```
-
-#### Python
-```bash
-# Origin
-wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/python/ancaptcha.py
-
-# Tor
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/examples/python/ancaptcha.py
-```
-
-#### PHP
-```bash
-# Origin
-wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/php/AnCaptcha.php
-
-# Tor
-torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/examples/php/AnCaptcha.php
+# 4. Extract
+tar -xzf ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
 ```
 
 ## Security and Compliance
@@ -225,12 +193,15 @@ The library underwent the following verifications:
 - **Memory Safety**: Audited with Valgrind (`memcheck`) during FFI integration testing. Verified **0 bytes definitely lost** across the C-ABI boundary.
 - **Cryptographic Integrity**: Authenticated encryption (ChaCha20-Poly1305) prevents token tampering and enforces strict TTL-based expiration.
 
+## Repositories
+
+- **Main**: `https://git.mrmave.work/maverick/ancaptcha`
+- **Mirror (Tor)**: `http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha`
+- **Mirror (Codeberg)**: `https://codeberg.org/mrmave/ancaptcha`
+
 ## License
 
 (c) 2026 Maverick. Licensed under the Apache-2.0 License.
-
-- **Repository**: `https://git.mrmave.work/maverick/ancaptcha`
-- **Tor**: `http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha`
 
 ## Donation
 
