@@ -15,18 +15,18 @@
 
 require_once __DIR__ . "/AnCaptcha.php";
 
-# Environment-aware paths for the FFI library and header.
+// Environment-aware paths for the FFI library and header.
 $header_path = getenv("ANCAPTCHA_HEADER_PATH") ?: __DIR__ . "/ancaptcha-ffi.h";
 $lib_path = getenv("ANCAPTCHA_LIB_PATH") ?: __DIR__ . "/libancaptcha_ffi.so";
 
-# Use a real 32-byte key from env vars in production.
-# Generate with: `openssl rand -hex 32`
+// Use a real 32-byte key from env vars in production.
+// Generate with: `openssl rand -hex 32`
 $secret = str_repeat("\0", 32);
 
 try {
     $captcha = new AnCaptcha($lib_path, $header_path, $secret);
     
-    # Asset pre-computation is triggered synchronously here for demonstration.
+    // Asset pre-computation is triggered synchronously here for demonstration.
     $captcha->warmUp('rotate');
     $captcha->warmUp('slider');
     $captcha->warmUp('pair');
@@ -41,7 +41,9 @@ $diff_raw = $_GET['diff'] ?? ($_POST['diff'] ?? null);
 $kind = is_string($kind_raw) ? $kind_raw : '';
 $diff = is_string($diff_raw) ? $diff_raw : '';
 
-/// Helper for isolated template rendering.
+/**
+ * Helper for isolated template rendering.
+ */
 function render(string $path, array $view_data): void
 {
     extract($view_data);
@@ -56,12 +58,12 @@ if ($kind === '' || $diff === '') {
 $success = false;
 $user_error_msg = null;
 
-# Handle verification POST requests.
+// Handle verification POST requests.
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $form_data = http_build_query($_POST);
     
     try {
-        # Automated verification parses the raw form body and detects the challenge type.
+        // Automated verification parses the raw form body and detects the challenge type.
         $isValid = $captcha->verify($form_data);
         if ($isValid) {
             $success = true;
@@ -74,7 +76,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
     }
 }
 
-# Handle challenge generation for both GET and failed POST attempts.
+// Handle challenge generation for both GET and failed POST attempts.
 try {
     $bundle = $captcha->generate($kind, $diff, $user_error_msg);
 } catch (AnCaptchaError $e) {

@@ -32,7 +32,7 @@ const (
 	minPathParts = 2
 )
 
-/// Initializes the anCaptcha client and triggers asset warming.
+// Initializes the anCaptcha client and triggers asset warming.
 func init() {
 	secret := make([]byte, secretLen)
 	var err error
@@ -67,7 +67,7 @@ func main() {
 	}
 }
 
-/// Renders the main index page.
+// Renders the main index page.
 func handleIndex(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
@@ -94,7 +94,7 @@ func capitalize(s string) string {
 	return strings.ToUpper(s[:1]) + s[1:]
 }
 
-/// Renders a captcha challenge within the template layout.
+// Renders a captcha challenge within the template layout.
 func renderCaptchaPage(w http.ResponseWriter, _ *http.Request, kind, diff string, success bool, errorMsg string) {
 	bundle, err := captcha.Generate(kind, diff, errorMsg)
 	if err != nil {
@@ -119,7 +119,7 @@ func renderCaptchaPage(w http.ResponseWriter, _ *http.Request, kind, diff string
 	_ = tmpl.ExecuteTemplate(w, "captcha.html", data)
 }
 
-/// Handles challenge routing and submission verification.
+// Handles challenge routing and submission verification.
 func handleCaptcha(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
 	if len(parts) < minPathParts {
