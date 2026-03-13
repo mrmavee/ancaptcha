@@ -6,16 +6,16 @@ No security advisories are currently ignored in `deny.toml`. All dependencies ar
 ## Fuzzing Status
 Core logic is continuously stressed using `cargo-fuzz` (libFuzzer) to ensure memory safety and zero panics.
 
-- **Corpus**: 930 seeds (3.7M, minimized)
+- **Corpus**: 934 seeds (3.8M, minimized)
 - **Crashes Found**: 0
-- **Last Updated**: 2026-03-03
+- **Last Updated**: 2026-03-13
 
 ### Statistics
 | Target | Coverage | Features | Corpus |
 |--------|----------|----------|--------|
-| `token_payload` | 490 | 735 | 33/13154b |
-| `verify_request` | 867 | 5646 | 694/326Kb |
-| `submissions` | 958 | 1874 | 183/34Kb |
+| `token_payload` | 510 | 775 | 33/13154b |
+| `verify_request` | 1253 | 6222 | 704/312Kb |
+| `submissions` | 981 | 1920 | 184/34Kb |
 
 ### Target Descriptions
 - `token_payload`: Fuzzes `ancaptcha::crypto::cipher::decrypt` (ChaCha20-Poly1305) and `ancaptcha::crypto::token::TokenPayload::from_bytes` (bincode deserialization) to ensure robust handling of malformed or corrupted data.

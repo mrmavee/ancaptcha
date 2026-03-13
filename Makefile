@@ -48,14 +48,14 @@ clean:
 	@rm -f lcov.info
 
 $(FUZZ_TARGETS):
-	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $@ -- $(FUZZ_FLAGS)
+	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $@ -- -dict=ancaptcha.dict $(FUZZ_FLAGS)
 
 fuzz: fuzz-all
 
 fuzz-all: $(FUZZ_TARGETS)
 
 $(addprefix fuzz-,$(FUZZ_TARGETS)): fuzz-%:
-	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $* -- $(FUZZ_FLAGS)
+	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $* -- -dict=ancaptcha.dict $(FUZZ_FLAGS)
 
 fuzz-stress-all:
 	@STRESS_SEC=$$(($(HOURS) * 3600)); \
