@@ -13,6 +13,7 @@ pub struct RotateConfig<'a> {
     pub token: &'a str,
     pub mapper: &'a mut NameMapper,
     pub theme: &'a Theme,
+    pub is_sprite: bool,
 }
 
 /// Generates the HTML fragment for a Rotate challenge.
@@ -26,10 +27,7 @@ pub fn generate_rotate_html(config: &mut RotateConfig) -> String {
 
     let modal_class = config.mapper.get_or_create("modal");
     let hidden_class = config.mapper.get_or_create("h");
-    let btn_class = config.mapper.get_or_create("btn");
     let stage_class = config.mapper.get_or_create("stage");
-    let controls_class = config.mapper.get_or_create("ctrl");
-    let wrapper_class = config.mapper.get_or_create("ir-w");
 
     let _ = write!(html, r#"<div class="{modal_class} anc_{}">"#, config.token);
 
@@ -65,78 +63,92 @@ pub fn generate_rotate_html(config: &mut RotateConfig) -> String {
         }
     }
 
+    for step in 0..steps {
+        write_rotate_step_html(&mut html, config, step, steps, &stage_class);
+    }
+
+    let _ = write!(html, r"</div>");
+
+    html
+}
+
+fn write_rotate_step_html(
+    html: &mut String,
+    config: &mut RotateConfig,
+    step: u8,
+    steps: u8,
+    stage_class: &str,
+) {
+    let btn_class = config.mapper.get_or_create("btn");
+    let wrapper_class = config.mapper.get_or_create("ir-w");
     let ti_class = config.mapper.get_or_create("ti");
     let im_w_class = config.mapper.get_or_create("im-w");
     let st_i_class = config.mapper.get_or_create("st-i");
     let rt_class = config.mapper.get_or_create("rt");
     let nx_class = config.mapper.get_or_create("nx");
 
-    for step in 0..steps {
-        let step_key = config.mapper.get_or_create(&format!("step{step}"));
-        let _ = write!(html, r#"<div class="{stage_class} {step_key}">"#);
+    let step_key = config.mapper.get_or_create(&format!("step{step}"));
+    let _ = write!(html, r#"<div class="{stage_class} {step_key}">"#);
+    let _ = write!(html, r#"<div class="{ti_class}">ROTATE THE PIC</div>"#);
 
-        let _ = write!(html, r#"<div class="{ti_class}">ROTATE THE PIC</div>"#);
+    let _ = write!(html, r#"<div class="{im_w_class}">"#);
+    let initial_rot_class = config.mapper.get_or_create(&format!("ir{step}"));
+    let _ = write!(html, r#"<div class="{wrapper_class} {initial_rot_class}">"#);
 
-        let _ = write!(html, r#"<div class="{im_w_class}">"#);
-        let initial_rot_class = config.mapper.get_or_create(&format!("ir{step}"));
-        let _ = write!(html, r#"<div class="{wrapper_class} {initial_rot_class}">"#);
+    let img_id_obf = config.mapper.get_or_create(&format!("img{step}"));
+    let img_data_class = config.mapper.get_or_create(&format!("id{step}"));
+    let extra_class = if config.is_sprite {
+        format!(" {}", config.mapper.get_or_create("ispr"))
+    } else {
+        String::new()
+    };
+    let _ = write!(
+        html,
+        r#"<div id="{img_id_obf}" class="{img_data_class}{extra_class}"></div>"#
+    );
+    let _ = write!(html, r"</div></div>");
 
-        let img_id_obf = config.mapper.get_or_create(&format!("img{step}"));
-        let img_data_class = config.mapper.get_or_create(&format!("idat{step}"));
+    if steps > 1 {
         let _ = write!(
             html,
-            r#"<div id="{img_id_obf}" class="{img_data_class}"></div>"#
+            r#"<div class="{st_i_class}">{}/{}</div>"#,
+            step + 1,
+            steps
         );
-        let _ = write!(html, r"</div></div>");
-
-        if steps > 1 {
-            let _ = write!(
-                html,
-                r#"<div class="{st_i_class}">{}/{}</div>"#,
-                step + 1,
-                steps
-            );
-        }
-
-        let _ = write!(html, r#"<div class="{controls_class}">"#);
-
-        let rot_c = config.mapper.get_or_create("rc");
-        let _ = write!(html, r#"<div class="{rot_c}">"#);
-        for idx in 0..8 {
-            let next_idx = (idx + 1) % 8;
-            let next_id = config.mapper.get_or_create(&format!("r{step}_{next_idx}"));
-            let label_class = config.mapper.get_or_create(&format!("l{step}_{idx}"));
-
-            let _ = write!(
-                html,
-                r#"<label for="{next_id}" class="{label_class} {btn_class} {rt_class}">Rotate</label>"#
-            );
-        }
-        let _ = write!(html, "</div>");
-
-        let nav_c = config.mapper.get_or_create("nc");
-        let _ = write!(html, r#"<div class="{nav_c}">"#);
-        if step < steps - 1 {
-            let next_stage_id = config.mapper.get_or_create(&format!("st{}", step + 1));
-            let _ = write!(
-                html,
-                r#"<label for="{next_stage_id}" class="{btn_class} {nx_class}">Next</label>"#
-            );
-        } else {
-            let completed_id = config.mapper.get_or_create("completed");
-            let _ = write!(
-                html,
-                r#"<label for="{completed_id}" class="{btn_class} {nx_class}">Done</label>"#
-            );
-        }
-        let _ = write!(html, "</div>");
-
-        let _ = write!(html, r"</div></div>");
     }
 
-    let _ = write!(html, r"</div>");
+    let controls_class = config.mapper.get_or_create("ctrl");
+    let _ = write!(html, r#"<div class="{controls_class}">"#);
+    let rot_c = config.mapper.get_or_create("rc");
+    let _ = write!(html, r#"<div class="{rot_c}">"#);
+    for idx in 0..8 {
+        let next_idx = (idx + 1) % 8;
+        let next_id = config.mapper.get_or_create(&format!("r{step}_{next_idx}"));
+        let label_class = config.mapper.get_or_create(&format!("l{step}_{idx}"));
+        let _ = write!(
+            html,
+            r#"<label for="{next_id}" class="{label_class} {btn_class} {rt_class}">Rotate</label>"#
+        );
+    }
+    let _ = write!(html, "</div>");
 
-    html
+    let nav_c = config.mapper.get_or_create("nc");
+    let _ = write!(html, r#"<div class="{nav_c}">"#);
+    if step < steps - 1 {
+        let next_stage_id = config.mapper.get_or_create(&format!("st{}", step + 1));
+        let _ = write!(
+            html,
+            r#"<label for="{next_stage_id}" class="{btn_class} {nx_class}">Next</label>"#
+        );
+    } else {
+        let completed_id = config.mapper.get_or_create("completed");
+        let _ = write!(
+            html,
+            r#"<label for="{completed_id}" class="{btn_class} {nx_class}">Done</label>"#
+        );
+    }
+    let _ = write!(html, "</div>");
+    let _ = write!(html, r"</div></div>");
 }
 
 /// Generates the CSS rules for a Rotate challenge.
@@ -201,13 +213,10 @@ pub fn generate_rotate_css(config: &mut RotateConfig) -> String {
         ".{wrapper_class}{{width:100% !important;height:100% !important;transition:transform 0.3s !important;}}"
     );
 
-    for (step, img_b64) in config.images_base64.iter().enumerate() {
-        let img_data_class = config.mapper.get_or_create(&format!("idat{step}"));
-        let _ = write!(
-            css,
-            ".anc_{} .{img_data_class}{{width:100% !important;height:100% !important;background-image:url(data:image/jpeg;base64,{img_b64}) !important;background-size:cover !important;transition:transform 0.3s !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;}}",
-            config.token
-        );
+    if config.is_sprite && steps > 1 {
+        write_rotate_sprite_css(&mut css, config);
+    } else {
+        write_rotate_individual_css(&mut css, config);
     }
 
     write_rotate_controls_css(
@@ -229,6 +238,40 @@ pub fn generate_rotate_css(config: &mut RotateConfig) -> String {
     }
 
     css
+}
+
+fn write_rotate_individual_css(css: &mut String, config: &mut RotateConfig) {
+    for (step, img_b64) in config.images_base64.iter().enumerate() {
+        let img_data_class = config.mapper.get_or_create(&format!("id{step}"));
+        let _ = write!(
+            css,
+            ".anc_{} .{img_data_class}{{width:100% !important;height:100% !important;background-image:url(data:image/jpeg;base64,{img_b64}) !important;background-size:cover !important;transition:transform 0.3s !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;}}",
+            config.token
+        );
+    }
+}
+
+fn write_rotate_sprite_css(css: &mut String, config: &mut RotateConfig) {
+    let steps = config.difficulty.steps();
+    let sprite_b64 = config.images_base64.first().copied().unwrap_or("");
+    let cell_w = 120;
+    let sprite_class = config.mapper.get_or_create("ispr");
+
+    let _ = write!(
+        css,
+        ".anc_{} .{sprite_class}{{width:100% !important;height:100% !important;background-image:url(data:image/jpeg;base64,{sprite_b64}) !important;background-size:{}px 100% !important;transition:transform 0.3s !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;}}",
+        config.token,
+        i32::from(steps) * cell_w
+    );
+
+    for step in 0..steps {
+        let img_data_class = config.mapper.get_or_create(&format!("id{step}"));
+        let x_off = i32::from(step) * -cell_w;
+        let _ = write!(
+            css,
+            ".{img_data_class}{{background-position:{x_off}px 0 !important;}}"
+        );
+    }
 }
 
 fn write_rotate_controls_css(
@@ -318,6 +361,7 @@ mod tests {
             token: "test_token",
             mapper: &mut mapper,
             theme: &theme,
+            is_sprite: false,
         };
 
         let html = generate_rotate_html(&mut config);
@@ -341,10 +385,31 @@ mod tests {
             token: "t",
             mapper: &mut mapper,
             theme: &theme,
+            is_sprite: false,
         };
 
         let css = generate_rotate_css(&mut config);
         assert!(css.contains("transform:rotate(45deg)"));
         assert!(css.contains("display:block"));
+    }
+
+    #[test]
+    fn sprite_css() {
+        let mut mapper = NameMapper::new(0);
+        let theme = Theme::default();
+        let images = vec!["sprite_data"];
+        let mut config = RotateConfig {
+            difficulty: Difficulty::Medium,
+            images_base64: &images,
+            initial_rotations: &[90, 180],
+            token: "t",
+            mapper: &mut mapper,
+            theme: &theme,
+            is_sprite: true,
+        };
+
+        let css = generate_rotate_css(&mut config);
+        assert!(css.contains("background-position"));
+        assert!(css.contains("sprite_data"));
     }
 }

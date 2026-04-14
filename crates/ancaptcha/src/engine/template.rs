@@ -13,6 +13,7 @@ pub enum CaptchaConfig<'a> {
     Rotate {
         images_base64: &'a [&'a str],
         initial_rotations: &'a [u16],
+        is_sprite: bool,
     },
     Slider {
         images_base64: &'a [&'a str],
@@ -88,6 +89,7 @@ pub fn generate_full_captcha(request: &mut CaptchaRequest) -> (String, String) {
         CaptchaConfig::Rotate {
             images_base64,
             initial_rotations,
+            is_sprite,
         } => {
             let mut config = RotateConfig {
                 difficulty: request.difficulty,
@@ -96,6 +98,7 @@ pub fn generate_full_captcha(request: &mut CaptchaRequest) -> (String, String) {
                 token: request.token,
                 mapper: &mut mapper,
                 theme: request.theme,
+                is_sprite: *is_sprite,
             };
             (
                 generate_rotate_html(&mut config),
@@ -169,6 +172,7 @@ mod tests {
             config: CaptchaConfig::Rotate {
                 images_base64: &["a", "b"],
                 initial_rotations: &[0, 1],
+                is_sprite: false,
             },
             error_message: None,
         };
@@ -178,6 +182,32 @@ mod tests {
         assert!(html.contains("<style>"));
         assert!(html.contains("data:image/jpeg;base64,a"));
         assert!(html.contains("data:image/jpeg;base64,b"));
+    }
+
+    #[test]
+    fn full_rotate_sprite() {
+        let theme = Theme::default();
+        let layout = Layout::default();
+        let mut request = CaptchaRequest {
+            image_base64: "img",
+            token: "tok",
+            seed: 0,
+            difficulty: Difficulty::Medium,
+            theme: &theme,
+            layout: &layout,
+            config: CaptchaConfig::Rotate {
+                images_base64: &["sprite_data"],
+                initial_rotations: &[0, 1],
+                is_sprite: true,
+            },
+            error_message: None,
+        };
+
+        let (html, css) = generate_full_captcha(&mut request);
+        assert!(css.is_empty());
+        assert!(html.contains("<style>"));
+        assert!(html.contains("data:image/jpeg;base64,sprite_data"));
+        assert!(html.contains("background-position"));
     }
 
     #[test]
@@ -219,7 +249,7 @@ mod tests {
             theme: &theme,
             layout: &layout,
             config: CaptchaConfig::Pair {
-                images_base64: &["p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9"],
+                images_base64: &["sprite1"],
                 correct_pairs: &[(0, 1)],
             },
             error_message: None,
@@ -228,7 +258,7 @@ mod tests {
         let (html, css) = generate_full_captcha(&mut request);
         assert!(css.is_empty());
         assert!(html.contains("<style>"));
-        assert!(html.contains("data:image/jpeg;base64,p1"));
+        assert!(html.contains("data:image/jpeg;base64,sprite1"));
         assert!(html.contains("display:grid"));
     }
 }

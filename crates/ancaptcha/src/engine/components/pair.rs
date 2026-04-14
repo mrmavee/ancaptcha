@@ -76,10 +76,10 @@ pub fn generate_pair_html(config: &mut PairConfig) -> String {
         let _ = write!(html, r#"<div class="{grid_class}">"#);
         for cell in 0..9_usize {
             let input_id = config.mapper.get_or_create(&format!("g{step}_{cell}"));
-            let img_data_class = config.mapper.get_or_create(&format!("idat{step}_{cell}"));
+            let cell_class = config.mapper.get_or_create(&format!("gc{step}_{cell}"));
             let _ = write!(
                 html,
-                r#"<label for="{input_id}"><div class="{grid_img_class} {img_data_class}"></div></label>"#
+                r#"<label for="{input_id}"><div class="{grid_img_class} {cell_class}"></div></label>"#
             );
         }
         let _ = write!(html, r"</div>");
@@ -179,19 +179,10 @@ pub fn generate_pair_css(config: &mut PairConfig) -> String {
     );
     let _ = write!(
         css,
-        ".{grid_class} .{grid_img_class}{{width:100% !important;height:80px !important;display:block !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;background-size:cover !important;}}"
+        ".{grid_class} .{grid_img_class}{{width:100% !important;height:80px !important;display:block !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;background-size:300px 300px !important;}}"
     );
 
-    for (idx, img_b64) in config.images_base64.iter().enumerate() {
-        let step = idx / 9;
-        let cell = idx % 9;
-        let img_data_class = config.mapper.get_or_create(&format!("idat{step}_{cell}"));
-        let _ = write!(
-            css,
-            ".anc_{} .{img_data_class}{{background-image:url(data:image/jpeg;base64,{img_b64}) !important;}}",
-            config.token
-        );
-    }
+    write_pair_sprite_css(&mut css, config);
 
     let _ = write!(
         css,
@@ -227,6 +218,38 @@ pub fn generate_pair_css(config: &mut PairConfig) -> String {
     css
 }
 
+fn write_pair_sprite_css(css: &mut String, config: &mut PairConfig) {
+    let steps = config.difficulty.steps();
+    let grid_img_class = config.mapper.get_or_create("grid-img");
+
+    for step in 0..steps {
+        let sprite_b64 = config
+            .images_base64
+            .get(step as usize)
+            .copied()
+            .unwrap_or("");
+
+        let step_key = config.mapper.get_or_create(&format!("pstep{step}"));
+        let _ = write!(
+            css,
+            ".anc_{} .{step_key} .{grid_img_class}{{background-image:url(data:image/jpeg;base64,{sprite_b64}) !important;}}",
+            config.token
+        );
+
+        for cell in 0..9_u8 {
+            let col = cell % 3;
+            let row = cell / 3;
+            let x_off = -i32::from(col) * 100;
+            let y_off = -i32::from(row) * 100;
+            let cell_class = config.mapper.get_or_create(&format!("gc{step}_{cell}"));
+            let _ = write!(
+                css,
+                ".{cell_class}{{background-position:{x_off}px {y_off}px !important;}}"
+            );
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -235,13 +258,11 @@ mod tests {
     fn html_generation() {
         let mut mapper = NameMapper::new(0);
         let theme = Theme::default();
-        let images = vec![
-            "img1", "img2", "img1", "img3", "img4", "img5", "img6", "img7", "img8",
-        ];
+        let images = vec!["sprite1"];
         let mut config = PairConfig {
-            difficulty: Difficulty::Medium,
+            difficulty: Difficulty::Easy,
             images_base64: &images,
-            correct_pairs: &[(0, 2), (1, 5)],
+            correct_pairs: &[(0, 2)],
             token: "test_token",
             mapper: &mut mapper,
             theme: &theme,
@@ -253,14 +274,14 @@ mod tests {
         assert!(html.contains(r#"type="radio""#));
         assert!(html.contains(&format!(r#"name="{t_name}""#)));
         assert!(html.contains("test_token"));
-        assert!(css.contains("data:image/jpeg;base64,img1"));
+        assert!(css.contains("data:image/jpeg;base64,sprite1"));
     }
 
     #[test]
     fn css_generation() {
         let mut mapper = NameMapper::new(0);
         let theme = Theme::default();
-        let images = vec!["img1"];
+        let images = vec!["grid_sprite"];
         let mut config = PairConfig {
             difficulty: Difficulty::Easy,
             images_base64: &images,
@@ -273,5 +294,28 @@ mod tests {
         let css = generate_pair_css(&mut config);
         assert!(css.contains("display:grid"));
         assert!(css.contains("grid-template-columns"));
+        assert!(css.contains("background-position"));
+    }
+
+    #[test]
+    fn sprite_offsets() {
+        let mut mapper = NameMapper::new(0);
+        let theme = Theme::default();
+        let images = vec!["spr"];
+        let mut config = PairConfig {
+            difficulty: Difficulty::Easy,
+            images_base64: &images,
+            correct_pairs: &[(0, 2)],
+            token: "t",
+            mapper: &mut mapper,
+            theme: &theme,
+        };
+
+        let css = generate_pair_css(&mut config);
+        assert!(css.contains("background-position:0px 0px"));
+        assert!(css.contains("background-position:-100px 0px"));
+        assert!(css.contains("background-position:-200px 0px"));
+        assert!(css.contains("background-position:0px -100px"));
+        assert!(css.contains("background-size:300px 300px"));
     }
 }

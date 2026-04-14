@@ -191,6 +191,7 @@ fn engine_literals() {
         token: "tok",
         mapper: &mut mapper,
         theme: &theme,
+        is_sprite: false,
     };
     assert!(generate_rotate_html(&mut rot_cfg).contains("value="));
 

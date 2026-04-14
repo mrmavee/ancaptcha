@@ -110,6 +110,7 @@ impl NameMapper {
                     }
                 }
                 let _ = self.get_or_create("nc");
+                let _ = self.get_or_create("ispr");
             }
             crate::common::CAPTCHA_TYPE_SLIDER => {
                 let _ = self.get_or_create("modal");
@@ -128,7 +129,6 @@ impl NameMapper {
                         let _ = self.get_or_create(&format!("p{j}"));
                     }
                 }
-                let _ = self.get_or_create("tg");
                 let _ = self.get_or_create("nc");
             }
             crate::common::CAPTCHA_TYPE_PAIR => {
@@ -146,6 +146,7 @@ impl NameMapper {
                         let _ = self.get_or_create(&format!("g{i}_{j}"));
                         let _ = self.get_or_create(&format!("s{i}_{j}"));
                         let _ = self.get_or_create(&format!("c{j}"));
+                        let _ = self.get_or_create(&format!("gc{i}_{j}"));
                     }
                 }
             }

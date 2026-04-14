@@ -29,7 +29,7 @@ pub fn generate_rotate_bundle(
     let image_names = cache.all_image_names();
     let steps = difficulty.steps() as usize;
 
-    let mut images = Vec::with_capacity(steps);
+    let mut raw_bins: Vec<Vec<u8>> = Vec::with_capacity(steps);
     let mut initial_rotations = Vec::with_capacity(steps);
     let mut correct_angles = Vec::with_capacity(steps);
 
@@ -49,7 +49,7 @@ pub fn generate_rotate_bundle(
             .cloned()
             .unwrap_or_else(|| "1".to_string());
         let bin = cache.get_image(&name).unwrap_or_default();
-        images.push(crate::common::salt_and_encode_b64(bin));
+        raw_bins.push(bin);
 
         let angle_idx = crate::common::get_random_range(0..valid_angles.len());
         let init = valid_angles.get(angle_idx).copied().unwrap_or(0);
@@ -68,8 +68,20 @@ pub fn generate_rotate_bundle(
     let encrypted = crate::crypto::cipher::encrypt(secret, &plaintext)?;
     let token = crate::common::b64_encode_url_safe(&encrypted);
 
-    let images_refs: Vec<&str> = images.iter().map(AsRef::as_ref).collect();
+    let (images_owned, is_sprite) = if steps > 1 {
+        let refs: Vec<&[u8]> = raw_bins.iter().map(Vec::as_slice).collect();
+        let sprite = crate::engine::stitch_horizontal(&refs, 200, 200)
+            .ok_or(crate::AnCaptchaError::InvalidToken)?;
+        (vec![crate::common::salt_and_encode_b64(sprite)], true)
+    } else {
+        let imgs: Vec<String> = raw_bins
+            .into_iter()
+            .map(crate::common::salt_and_encode_b64)
+            .collect();
+        (imgs, false)
+    };
 
+    let images_refs: Vec<&str> = images_owned.iter().map(AsRef::as_ref).collect();
     let mut request = CaptchaRequest {
         image_base64: "",
         token: &token,
@@ -80,12 +92,12 @@ pub fn generate_rotate_bundle(
         config: CaptchaConfig::Rotate {
             images_base64: &images_refs,
             initial_rotations: &initial_rotations,
+            is_sprite,
         },
         error_message,
     };
 
     let (html, css) = crate::engine::template::generate_full_captcha(&mut request);
-
     Ok(CaptchaBundle { token, html, css })
 }
 
@@ -113,8 +125,8 @@ pub fn generate_slider_bundle(
         }
     }
 
-    let mut images = Vec::with_capacity(steps);
-    let mut pieces = Vec::with_capacity(steps);
+    let mut main_bins: Vec<Vec<u8>> = Vec::with_capacity(steps);
+    let mut piece_bins: Vec<Vec<u8>> = Vec::with_capacity(steps);
     let mut solution = Vec::with_capacity(steps * 2);
 
     for idx in selected_indices {
@@ -125,8 +137,8 @@ pub fn generate_slider_bundle(
         let (x_idx, y_pos, m, p) = cache
             .get_slider_pair(&name)
             .ok_or(crate::AnCaptchaError::InvalidToken)?;
-        images.push(crate::common::salt_and_encode_b64(m));
-        pieces.push(crate::common::salt_and_encode_b64(p));
+        main_bins.push(m);
+        piece_bins.push(p);
         solution.push(x_idx);
         solution.push(y_pos);
     }
@@ -136,8 +148,21 @@ pub fn generate_slider_bundle(
     let encrypted = crate::crypto::cipher::encrypt(secret, &plaintext)?;
     let token = crate::common::b64_encode_url_safe(&encrypted);
 
-    let images_refs: Vec<&str> = images.iter().map(AsRef::as_ref).collect();
-    let pieces_refs: Vec<&str> = pieces.iter().map(AsRef::as_ref).collect();
+    let main_refs: Vec<&[u8]> = main_bins.iter().map(Vec::as_slice).collect();
+    let pc_refs: Vec<&[u8]> = piece_bins.iter().map(Vec::as_slice).collect();
+
+    let main_sprite = crate::engine::stitch_vertical(&main_refs, 200, 200)
+        .ok_or(crate::AnCaptchaError::InvalidToken)?;
+    let piece_sprite = crate::engine::stitch_vertical(&pc_refs, 50, 50)
+        .ok_or(crate::AnCaptchaError::InvalidToken)?;
+
+    let main_b64 = crate::common::salt_and_encode_b64(main_sprite);
+    let piece_b64 = crate::common::salt_and_encode_b64(piece_sprite);
+
+    let images_owned = [main_b64];
+    let pieces_owned = [piece_b64];
+    let images_refs: Vec<&str> = images_owned.iter().map(AsRef::as_ref).collect();
+    let pieces_refs: Vec<&str> = pieces_owned.iter().map(AsRef::as_ref).collect();
 
     let mut request = CaptchaRequest {
         image_base64: "",
@@ -178,7 +203,7 @@ pub fn generate_pair_bundle(
     let mut rng = rand::rng();
 
     let mut pairs = Vec::with_capacity(steps);
-    let mut step_images_pool = Vec::with_capacity(steps * 9);
+    let mut step_sprites: Vec<String> = Vec::with_capacity(steps);
 
     for _ in 0..steps {
         let a = crate::common::get_random_range(0..9u8);
@@ -212,7 +237,7 @@ pub fn generate_pair_bundle(
             }
         }
 
-        let mut grid = vec![Vec::new(); 9];
+        let mut grid: Vec<Vec<u8>> = vec![Vec::new(); 9];
         let target = unique_binaries.first().cloned().unwrap_or_default();
         if let Some(cell) = grid.get_mut(a as usize) {
             cell.clone_from(&target);
@@ -233,11 +258,10 @@ pub fn generate_pair_bundle(
             }
         }
 
-        let grid_b64: Vec<String> = grid
-            .into_iter()
-            .map(crate::common::salt_and_encode_b64)
-            .collect();
-        step_images_pool.extend(grid_b64);
+        let grid_refs: Vec<&[u8]> = grid.iter().map(Vec::as_slice).collect();
+        let sprite = crate::engine::stitch_grid(&grid_refs, 100, 3)
+            .ok_or(crate::AnCaptchaError::InvalidToken)?;
+        step_sprites.push(crate::common::salt_and_encode_b64(sprite));
     }
 
     let solution: Vec<u8> = pairs.iter().flat_map(|(a, b)| vec![*a, *b]).collect();
@@ -247,7 +271,7 @@ pub fn generate_pair_bundle(
     let encrypted = crate::crypto::cipher::encrypt(secret, &plaintext)?;
     let token = crate::common::b64_encode_url_safe(&encrypted);
 
-    let images_refs: Vec<&str> = step_images_pool.iter().map(AsRef::as_ref).collect();
+    let images_refs: Vec<&str> = step_sprites.iter().map(AsRef::as_ref).collect();
 
     let mut request = CaptchaRequest {
         image_base64: "",

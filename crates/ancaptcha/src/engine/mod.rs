@@ -17,6 +17,6 @@ pub use components::{
 pub use minify::{minify_css, minify_html};
 pub use noise::{apply_color_shift, apply_full_noise, apply_pixel_jitter, apply_salt_pepper};
 pub use obfuscator::NameMapper;
-pub use processor::create_slider_cutout;
+pub use processor::{create_slider_cutout, stitch_grid, stitch_horizontal, stitch_vertical};
 pub use skeleton::generate_initial_state;
 pub use template::{CaptchaRequest, generate_full_captcha};

@@ -81,21 +81,10 @@ pub fn generate_slider_html(config: &mut SliderConfig) -> String {
         );
 
         let _ = write!(html, r#"<div class="{im_w_class}">"#);
-        let img_data_class = config.mapper.get_or_create(&format!("idat{step}"));
-        let piece_data_class = config.mapper.get_or_create(&format!("pdat{step}"));
 
-        let _ = write!(
-            html,
-            r#"<div class="{main_img_class} {img_data_class}"></div>"#
-        );
+        let _ = write!(html, r#"<div class="{main_img_class} {step_key}"></div>"#);
 
-        let target_class = config.mapper.get_or_create("tg");
-        let _ = write!(html, r#"<div class="{target_class} {step_key}"></div>"#);
-
-        let _ = write!(
-            html,
-            r#"<div class="{piece_img_class} {step_key} {piece_data_class}"></div>"#
-        );
+        let _ = write!(html, r#"<div class="{piece_img_class} {step_key}"></div>"#);
         let _ = write!(html, r"</div>");
 
         if steps > 1 {
@@ -161,18 +150,13 @@ pub fn generate_slider_css(config: &mut SliderConfig) -> String {
         &accent_color,
     );
 
-    write_slider_images_css(&mut css, config);
+    write_slider_sprite_css(&mut css, config);
 
-    let target_class = config.mapper.get_or_create("tg");
     let piece_img_class = config.mapper.get_or_create("piece-img");
 
     let _ = write!(
         css,
-        ".{target_class}{{position:absolute !important;width:50px !important;height:50px !important;background:rgba(0,0,0,0.6) !important;box-shadow:0 0 0 1px rgba(0,0,0,0.6),inset 0 0 5px rgba(0,0,0,0.9) !important;z-index:1 !important;}}"
-    );
-    let _ = write!(
-        css,
-        ".{piece_img_class}{{position:absolute !important;left:0 !important;width:50px !important;height:50px !important;transition:transform 0.3s !important;box-shadow:0 0 3px rgba(0,0,0,0.7) !important;z-index:2 !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;background-size:cover !important;}}"
+        ".{piece_img_class}{{position:absolute !important;left:0 !important;width:50px !important;height:50px !important;transition:transform 0.3s !important;box-shadow:0 0 3px rgba(0,0,0,0.7) !important;z-index:2 !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;background-size:50px 50px !important;}}"
     );
 
     let track_class = config.mapper.get_or_create("track");
@@ -270,51 +254,58 @@ fn write_slider_base_css(
     );
     let _ = write!(
         css,
-        ".{main_img_class}{{width:100% !important;height:100% !important;display:block !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;background-size:cover !important;}}"
+        ".{main_img_class}{{width:100% !important;height:100% !important;display:block !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;}}"
     );
 }
 
-fn write_slider_images_css(css: &mut String, config: &mut SliderConfig) {
-    for (step, img_b64) in config.images_base64.iter().enumerate() {
-        let img_data_class = config.mapper.get_or_create(&format!("idat{step}"));
-        let _ = write!(
-            css,
-            ".anc_{} .{img_data_class}{{background-image:url(data:image/jpeg;base64,{img_b64}) !important;}}",
-            config.token
-        );
-    }
+fn write_slider_sprite_css(css: &mut String, config: &mut SliderConfig) {
+    let steps = config.difficulty.steps();
+    let main_img_class = config.mapper.get_or_create("main-img");
+    let piece_img_class = config.mapper.get_or_create("piece-img");
 
-    for (step, p_b64) in config.pieces_base64.iter().enumerate() {
-        let p_data_class = config.mapper.get_or_create(&format!("pdat{step}"));
+    let main_b64 = config.images_base64.first().copied().unwrap_or("");
+    let piece_b64 = config.pieces_base64.first().copied().unwrap_or("");
+
+    let main_h = i32::from(steps) * 200;
+    let piece_h = i32::from(steps) * 50;
+
+    let _ = write!(
+        css,
+        ".anc_{} .{main_img_class}{{background-image:url(data:image/jpeg;base64,{main_b64}) !important;background-size:200px {main_h}px !important;}}",
+        config.token
+    );
+    let _ = write!(
+        css,
+        ".anc_{} .{piece_img_class}{{background-image:url(data:image/jpeg;base64,{piece_b64}) !important;background-size:50px {piece_h}px !important;}}",
+        config.token
+    );
+
+    for step in 0..steps {
+        let step_key = config.mapper.get_or_create(&format!("step{step}"));
+        let y_off = i32::from(step) * -200;
         let _ = write!(
             css,
-            ".anc_{} .{p_data_class}{{background-image:url(data:image/jpeg;base64,{p_b64}) !important;}}",
-            config.token
+            ".{main_img_class}.{step_key}{{background-position:0 {y_off}px !important;}}"
+        );
+
+        let py_off = i32::from(step) * -50;
+        let _ = write!(
+            css,
+            ".{piece_img_class}.{step_key}{{background-position:0 {py_off}px !important;}}"
         );
     }
 }
 
 fn write_step_css(css: &mut String, config: &mut SliderConfig, step: u8, stage_class: &str) {
-    let x_idx = config
-        .correct_positions
-        .get(step as usize * 2)
-        .copied()
-        .unwrap_or(0);
     let y_pos = config
         .correct_positions
         .get(step as usize * 2 + 1)
         .copied()
         .unwrap_or(140);
-    let target_x = x_idx * 8;
 
-    let target_class = config.mapper.get_or_create("tg");
     let piece_img_class = config.mapper.get_or_create("piece-img");
     let step_key = config.mapper.get_or_create(&format!("step{step}"));
 
-    let _ = write!(
-        css,
-        ".{target_class}.{step_key}{{left:{target_x}px !important;top:{y_pos}px !important;}}"
-    );
     let _ = write!(
         css,
         ".{piece_img_class}.{step_key}{{top:{y_pos}px !important;}}"
@@ -374,5 +365,25 @@ mod tests {
         let css = generate_slider_css(&mut config);
         assert!(css.contains("transform:translateX("));
         assert!(css.contains("display:block"));
+    }
+
+    #[test]
+    fn sprite_offsets() {
+        let mut mapper = NameMapper::new(0);
+        let theme = Theme::default();
+        let mut config = SliderConfig {
+            difficulty: Difficulty::Medium,
+            images_base64: &["main_sprite"],
+            pieces_base64: &["piece_sprite"],
+            correct_positions: &[5, 140, 7, 140],
+            token: "spr",
+            mapper: &mut mapper,
+            theme: &theme,
+        };
+
+        let css = generate_slider_css(&mut config);
+        assert!(css.contains("background-position:0 0px"));
+        assert!(css.contains("background-position:0 -200px"));
+        assert!(css.contains("background-size:200px 400px"));
     }
 }
