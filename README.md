@@ -1,8 +1,43 @@
+<div align="center">
+
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Rust Version](https://img.shields.io/badge/rust-1.92%2B-blue)](https://www.rust-lang.org/)
+[![Crates.io](https://img.shields.io/crates/v/ancaptcha.svg)](https://crates.io/crates/ancaptcha)
+[![Downloads](https://img.shields.io/crates/d/ancaptcha.svg)](https://crates.io/crates/ancaptcha)
+[![Coverage](assets/badges/coverage.png)](https://git.mrmave.work/maverick/ancaptcha)
+
+<br />
+<img src="assets/logo.png" alt="anCaptcha Logo" width="128" />
+
 # anCaptcha
 
-![Version](https://img.shields.io/badge/version-0.1.2-blue)
-![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![Coverage](assets/badges/coverage.png)
+**No-JS, stateless captcha engine implemented in Rust for cross-language integration.**
+
+[Security](docs/SECURITY.md)
+
+</div>
+
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#key-features">Key Features</a></li>
+    <li><a href="#preview">Preview</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#configuration">Configuration</a></li>
+    <li><a href="#installation-rust">Installation (Rust)</a></li>
+    <li><a href="#quick-start-build-from-source">Quick Start</a></li>
+    <li><a href="#custom-assets">Custom Assets</a></li>
+    <li><a href="#pre-built-library-go-python-php">Pre-built Library</a></li>
+    <li><a href="#manual-verification-recommended">Manual Verification</a></li>
+    <li><a href="#security-and-compliance">Security and Compliance</a></li>
+    <li><a href="#repositories">Repositories</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#donation">Donation</a></li>
+  </ol>
+</details>
+
+## Overview
 
 A No-JS, stateless captcha engine implemented in Rust for cross-language integration. Originally designed for the darknet, specifically for Tor hidden services, to provide human verification without requiring JavaScript.
 
@@ -195,9 +230,9 @@ The library underwent the following verifications:
 
 ## Repositories
 
-- **Main**: `https://git.mrmave.work/maverick/ancaptcha`
-- **Mirror (Tor)**: `http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha`
-- **Mirror (Codeberg)**: `https://codeberg.org/mrmave/ancaptcha`
+- **Main**: [git.mrmave.work/maverick/ancaptcha](https://git.mrmave.work/maverick/ancaptcha)
+- **Mirror (Tor)**: [mavegit...onion/ancaptcha](http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha)
+- **Mirror (Codeberg)**: [codeberg.org/mrmave/ancaptcha](https://codeberg.org/mrmave/ancaptcha)
 
 ## License
 
