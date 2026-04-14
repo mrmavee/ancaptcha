@@ -16,7 +16,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 ancaptcha = { version = "0.1.2", path = "../ancaptcha", registry = "maverick" }
-libc = "0.2.183"
+libc = "0.2.185"
 percent-encoding = "2.3.2"
 tracing = "0.1.44"
 

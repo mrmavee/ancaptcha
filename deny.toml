@@ -14,16 +14,9 @@ allow = [
     "MIT",
     "Apache-2.0",
     "BSD-3-Clause",
-    "ISC",
     "MPL-2.0",
     "Unicode-3.0",
-]
-
-[[licenses.clarify]]
-name = "ring"
-expression = "ISC"
-license-files = [
-    { path = "LICENSE", hash = 0xbd0ced23 }
+    "NCSA",
 ]
 
 [bans]
@@ -33,16 +26,28 @@ highlight = "all"
 allow = []
 deny = []
 skip = [
+    # Multiple versions of chacha20 and its dependencies are pulled by different
+    # versions of rand and chacha20poly1305.
     { name = "chacha20", version = "0.9.1" },
     { name = "chacha20", version = "0.10.0" },
     { name = "cpufeatures", version = "0.2.17" },
     { name = "cpufeatures", version = "0.3.0" },
+
+    # getrandom versions vary between libfuzzer-sys, rand, and transitive dependencies.
     { name = "getrandom", version = "0.2.17" },
-    { name = "getrandom", version = "0.4.1" },
+    { name = "getrandom", version = "0.3.4" },
+    { name = "getrandom", version = "0.4.2" },
+
+    # rand_core follows the distribution of getrandom across different toolchains.
     { name = "rand_core", version = "0.6.4" },
     { name = "rand_core", version = "0.10.0" },
-    { name = "windows-sys", version = "0.60.2" },
-    { name = "windows-sys", version = "0.61.2" },
+
+    # r-efi and winnow are pulled as transitive dependencies by different versions of
+    # toolchains like cbindgen and its TOML parsers.
+    { name = "r-efi", version = "5.3.0" },
+    { name = "r-efi", version = "6.0.0" },
+    { name = "winnow", version = "0.7.15" },
+    { name = "winnow", version = "1.0.1" },
 ]
 skip-tree = []
 
