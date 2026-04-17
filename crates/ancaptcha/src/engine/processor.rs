@@ -27,6 +27,7 @@ pub fn create_slider_cutout(
     )
 }
 
+/// Stitches images into a single vertical sprite strip.
 #[must_use]
 pub fn stitch_vertical(images: &[&[u8]], cell_w: u32, cell_h: u32) -> Option<Vec<u8>> {
     if images.is_empty() {
@@ -46,6 +47,7 @@ pub fn stitch_vertical(images: &[&[u8]], cell_w: u32, cell_h: u32) -> Option<Vec
     encode_rgba_jpeg(&canvas, 13)
 }
 
+/// Stitches images into a grid sprite with `cols` columns.
 #[must_use]
 pub fn stitch_grid(images: &[&[u8]], cell_size: u32, cols: u32) -> Option<Vec<u8>> {
     if images.is_empty() {
@@ -71,6 +73,7 @@ pub fn stitch_grid(images: &[&[u8]], cell_size: u32, cols: u32) -> Option<Vec<u8
     encode_rgba_jpeg(&canvas, 10)
 }
 
+/// Stitches images into a single horizontal sprite strip.
 #[must_use]
 pub fn stitch_horizontal(images: &[&[u8]], cell_w: u32, cell_h: u32) -> Option<Vec<u8>> {
     if images.is_empty() {

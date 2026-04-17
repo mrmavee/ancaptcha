@@ -6,6 +6,7 @@ use base64::{
     engine::general_purpose::{STANDARD, URL_SAFE_NO_PAD},
 };
 
+/// Encodes bytes to URL-safe base64 without padding.
 pub fn b64_encode_url_safe<T: AsRef<[u8]>>(input: T) -> String {
     URL_SAFE_NO_PAD.encode(input)
 }
@@ -17,11 +18,13 @@ pub fn b64_decode_url_safe<T: AsRef<[u8]>>(input: T) -> Result<Vec<u8>> {
     Ok(URL_SAFE_NO_PAD.decode(input)?)
 }
 
+/// Encodes bytes to standard base64.
 pub fn b64_encode_std<T: AsRef<[u8]>>(input: T) -> String {
     STANDARD.encode(input)
 }
 
 #[must_use]
+/// Appends 1–4 random bytes to the input, then encodes to standard base64.
 pub fn salt_and_encode_b64(mut input: Vec<u8>) -> String {
     let count = crate::common::random::get_random_range(1..5);
     for _ in 0..count {

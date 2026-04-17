@@ -8,6 +8,7 @@ use std::sync::{OnceLock, RwLock};
 
 static ASSET_CACHE: OnceLock<AssetCache> = OnceLock::new();
 
+/// Pre-computed slider variant: `(x_slot_idx, y_offset, main_image_bytes, piece_bytes)`.
 pub type SliderVariation = (u8, u8, Vec<u8>, Vec<u8>);
 
 /// Thread-safe cache for pre-computed captcha assets.

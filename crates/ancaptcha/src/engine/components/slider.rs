@@ -7,12 +7,19 @@ use crate::engine::NameMapper;
 
 /// Parameters for generating a Slider challenge.
 pub struct SliderConfig<'a> {
+    /// Step count.
     pub difficulty: Difficulty,
+    /// Background images with cutout in base64.
     pub images_base64: &'a [&'a str],
+    /// Puzzle pieces in base64.
     pub pieces_base64: &'a [&'a str],
+    /// Correct slot index per step.
     pub correct_positions: &'a [u8],
+    /// Challenge token.
     pub token: &'a str,
+    /// Per-render name obfuscator.
     pub mapper: &'a mut NameMapper,
+    /// Active theme.
     pub theme: &'a Theme,
 }
 

@@ -4,22 +4,35 @@ use std::fmt::Write;
 
 /// Parameters for generating the initial visual state of the captcha.
 pub struct InitialStateConfig<'a> {
+    /// Error message shown above the checkbox.
     pub error_message: Option<&'a str>,
+    /// Obfuscated IDs for this render.
     pub obfuscated_ids: ObfuscatedIds<'a>,
 }
 
 /// Obfuscated identifiers used in the base HTML structure.
 pub struct ObfuscatedIds<'a> {
+    /// Outer container ID.
     pub container_id: &'a str,
+    /// Trigger checkbox ID.
     pub checkbox_id: &'a str,
+    /// Completed state checkbox ID.
     pub completed_id: &'a str,
+    /// Label CSS class.
     pub label_class: &'a str,
+    /// Error CSS class.
     pub error_class: &'a str,
+    /// Hidden elements CSS class.
     pub hidden_class: &'a str,
+    /// Token form field name.
     pub token_name: &'a str,
+    /// Checkbox inner CSS class.
     pub checkbox_inner: &'a str,
+    /// "I'm not a robot" text CSS class.
     pub captcha_text: &'a str,
+    /// Logo wrapper CSS class.
     pub logo_wrapper: &'a str,
+    /// Logo icon CSS class.
     pub logo_icon: &'a str,
 }
 

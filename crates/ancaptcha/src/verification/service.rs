@@ -13,6 +13,7 @@ pub struct AnCaptcha {
 }
 
 impl AnCaptcha {
+    /// Creates a new service instance with the given configuration.
     #[must_use]
     pub const fn new(config: Config) -> Self {
         Self { config }

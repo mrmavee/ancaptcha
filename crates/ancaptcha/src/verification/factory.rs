@@ -8,8 +8,11 @@ use crate::storage::get_cache;
 
 /// Artifacts required to render and validate a captcha challenge.
 pub struct CaptchaBundle {
+    /// Encrypted URL-safe base64 token.
     pub token: String,
+    /// Challenge HTML fragment.
     pub html: String,
+    /// Challenge CSS.
     pub css: String,
 }
 

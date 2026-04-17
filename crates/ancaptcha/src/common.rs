@@ -13,8 +13,12 @@ pub use random::{
     get_random_u64,
 };
 
+/// 32-byte key for ChaCha20-Poly1305 token encryption.
 pub type Secret = [u8; 32];
 
+/// Identifier for the rotation challenge type.
 pub const CAPTCHA_TYPE_ROTATE: &str = "rotate";
+/// Identifier for the slider challenge type.
 pub const CAPTCHA_TYPE_SLIDER: &str = "slider";
+/// Identifier for the pair identification challenge type.
 pub const CAPTCHA_TYPE_PAIR: &str = "pair";

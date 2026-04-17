@@ -2,14 +2,19 @@
 
 use bincode_next::{Decode, Encode};
 
+/// Default token lifetime in seconds (5 minutes).
 pub const DEFAULT_TTL_SECONDS: u64 = 300;
 
 /// Encrypted state representing a captcha challenge.
 #[derive(Debug, Clone, PartialEq, Eq, Encode, Decode)]
 pub struct TokenPayload {
+    /// Serialized correct answer.
     pub solution: Vec<u8>,
+    /// Step count.
     pub difficulty: u8,
+    /// Creation timestamp (Unix seconds).
     pub timestamp: u64,
+    /// Seed for name obfuscation.
     pub seed: u64,
 }
 

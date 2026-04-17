@@ -7,12 +7,19 @@ use crate::engine::NameMapper;
 
 /// Parameters for generating a Rotate challenge.
 pub struct RotateConfig<'a> {
+    /// Step count.
     pub difficulty: Difficulty,
+    /// Per-step images in base64.
     pub images_base64: &'a [&'a str],
+    /// Initial angles per image (degrees).
     pub initial_rotations: &'a [u16],
+    /// Challenge token.
     pub token: &'a str,
+    /// Per-render name obfuscator.
     pub mapper: &'a mut NameMapper,
+    /// Active theme.
     pub theme: &'a Theme,
+    /// True if images form a horizontal sprite.
     pub is_sprite: bool,
 }
 

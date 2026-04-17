@@ -6,27 +6,35 @@ use thiserror::Error;
 #[derive(Debug, Error)]
 pub enum AnCaptchaError {
     #[error("Invalid or expired token")]
+    /// AEAD decryption failure.
     CryptoError(chacha20poly1305::aead::Error),
 
     #[error("Invalid or expired token")]
+    /// Token serialization failure.
     SerializationError(#[from] bincode_next::error::EncodeError),
 
     #[error("Invalid or expired token")]
+    /// Token deserialization failure.
     DeserializationError(#[from] bincode_next::error::DecodeError),
 
     #[error("Invalid or expired token")]
+    /// Base64 decoding failure.
     Base64Error(#[from] base64::DecodeError),
 
     #[error("Invalid or expired token")]
+    /// Token is structurally invalid or unrecognized.
     InvalidToken,
 
     #[error("Invalid or expired token")]
+    /// Token timestamp has exceeded the TTL.
     ExpiredToken,
 
     #[error("Invalid or expired token")]
+    /// Token HMAC or ciphertext integrity check failed.
     TamperedToken,
 
     #[error("Internal system error")]
+    /// Unrecoverable internal error.
     Internal(String),
 }
 

@@ -9,31 +9,52 @@ use crate::engine::{
     generate_slider_html, minify_css, minify_html,
 };
 
+/// Per-challenge config for the template renderer.
 pub enum CaptchaConfig<'a> {
+    /// Rotation challenge.
     Rotate {
+        /// Images in base64 (single or sprite).
         images_base64: &'a [&'a str],
+        /// Initial rotation per image (degrees).
         initial_rotations: &'a [u16],
+        /// True if images form a horizontal sprite.
         is_sprite: bool,
     },
+    /// Slider challenge.
     Slider {
+        /// Background images with cutout in base64.
         images_base64: &'a [&'a str],
+        /// Puzzle pieces in base64.
         pieces_base64: &'a [&'a str],
+        /// Correct slot index per step.
         correct_positions: &'a [u8],
     },
+    /// Pair matching challenge.
     Pair {
+        /// Per-step grid sprite in base64.
         images_base64: &'a [&'a str],
+        /// Correct pairs per step.
         correct_pairs: &'a [(u8, u8)],
     },
 }
 
+/// Input for `generate_full_captcha`.
 pub struct CaptchaRequest<'a> {
+    /// Base64 image (FFI passthrough).
     pub image_base64: &'a str,
+    /// Encrypted token embedded in the form.
     pub token: &'a str,
+    /// Seed for name obfuscation.
     pub seed: u64,
+    /// Challenge difficulty.
     pub difficulty: Difficulty,
+    /// Active theme.
     pub theme: &'a Theme,
+    /// Layout dimensions.
     pub layout: &'a Layout,
+    /// Challenge config.
     pub config: CaptchaConfig<'a>,
+    /// Error message shown above the form.
     pub error_message: Option<&'a str>,
 }
 

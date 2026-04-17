@@ -12,12 +12,19 @@ thread_local! {
 #[repr(C)]
 #[derive(Debug, PartialEq, Eq)]
 pub enum Status {
+    /// Success.
     Ok = 0,
+    /// Challenge verification failed.
     VerificationFailed = 1,
+    /// Internal panic.
     ErrPanic = -1,
+    /// Encryption/decryption failure.
     ErrCrypto = -2,
+    /// Memory allocation or buffer error.
     ErrMemory = -3,
+    /// Token structural error.
     ErrInvalidToken = -4,
+    /// Token expired.
     ErrExpiredToken = -5,
 }
 

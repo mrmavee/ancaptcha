@@ -7,11 +7,17 @@ use crate::engine::NameMapper;
 
 /// Parameters for generating a Pair challenge.
 pub struct PairConfig<'a> {
+    /// Step count.
     pub difficulty: Difficulty,
+    /// Per-step images in base64.
     pub images_base64: &'a [&'a str],
+    /// Correct pairs per step.
     pub correct_pairs: &'a [(u8, u8)],
+    /// Challenge token.
     pub token: &'a str,
+    /// Per-render name obfuscator.
     pub mapper: &'a mut NameMapper,
+    /// Active theme.
     pub theme: &'a Theme,
 }
 

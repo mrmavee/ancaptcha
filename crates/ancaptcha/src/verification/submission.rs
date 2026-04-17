@@ -10,9 +10,13 @@ use std::collections::HashMap;
 /// Submitted data for a Rotate captcha challenge.
 #[derive(Debug)]
 pub struct RotateSubmission {
+    /// Encrypted challenge token.
     pub token: String,
+    /// Obfuscated step 0 value.
     pub s0: Option<String>,
+    /// Obfuscated step 1 value.
     pub s1: Option<String>,
+    /// Obfuscated step 2 value.
     pub s2: Option<String>,
 }
 
@@ -71,9 +75,13 @@ impl RotateSubmission {
 /// Submitted data for a Slider captcha challenge.
 #[derive(Debug)]
 pub struct SliderSubmission {
+    /// Encrypted challenge token.
     pub token: String,
+    /// Obfuscated step 0 value.
     pub s0: Option<String>,
+    /// Obfuscated step 1 value.
     pub s1: Option<String>,
+    /// Obfuscated step 2 value.
     pub s2: Option<String>,
 }
 
@@ -132,9 +140,13 @@ impl SliderSubmission {
 /// Submitted data for a Pair identification challenge.
 #[derive(Debug)]
 pub struct PairSubmission {
+    /// Encrypted challenge token.
     pub token: String,
+    /// Selected cell identifiers for step 0.
     pub s0: Vec<String>,
+    /// Selected cell identifiers for step 1.
     pub s1: Vec<String>,
+    /// Selected cell identifiers for step 2.
     pub s2: Vec<String>,
 }
 
