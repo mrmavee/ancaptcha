@@ -10,7 +10,7 @@ authors.workspace = true
 cargo-fuzz = true
 
 [dependencies]
-ancaptcha = { version = "0.1.2", path = "../crates/ancaptcha" }
+ancaptcha = { version = "0.2.0", path = "../crates/ancaptcha" }
 arbitrary = { version = "1.4.2", features = ["derive"] }
 libfuzzer-sys = "0.4"
 

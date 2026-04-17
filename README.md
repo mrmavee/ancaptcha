@@ -171,28 +171,28 @@ Extract the FFI library and header, then download the wrapper for your language.
 
 **Go**
 ```bash
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
-tar -xzf ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
-cp ancaptcha-ffi-v0.1.2-linux-x86_64/libancaptcha_ffi.so ./
-cp ancaptcha-ffi-v0.1.2-linux-x86_64/ancaptcha-ffi.h ./
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.2.0/ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
+tar -xzf ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
+cp ancaptcha-ffi-v0.2.0-linux-x86_64/libancaptcha_ffi.so ./
+cp ancaptcha-ffi-v0.2.0-linux-x86_64/ancaptcha-ffi.h ./
 wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/go/ancaptcha/ancaptcha.go
 ```
 
 **Python**
 ```bash
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
-tar -xzf ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
-cp ancaptcha-ffi-v0.1.2-linux-x86_64/libancaptcha_ffi.so ./
-cp ancaptcha-ffi-v0.1.2-linux-x86_64/ancaptcha-ffi.h ./
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.2.0/ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
+tar -xzf ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
+cp ancaptcha-ffi-v0.2.0-linux-x86_64/libancaptcha_ffi.so ./
+cp ancaptcha-ffi-v0.2.0-linux-x86_64/ancaptcha-ffi.h ./
 wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/python/ancaptcha.py
 ```
 
 **PHP**
 ```bash
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
-tar -xzf ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
-cp ancaptcha-ffi-v0.1.2-linux-x86_64/libancaptcha_ffi.so ./
-cp ancaptcha-ffi-v0.1.2-linux-x86_64/ancaptcha-ffi.h ./
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.2.0/ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
+tar -xzf ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
+cp ancaptcha-ffi-v0.2.0-linux-x86_64/libancaptcha_ffi.so ./
+cp ancaptcha-ffi-v0.2.0-linux-x86_64/ancaptcha-ffi.h ./
 wget https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/php/AnCaptcha.php
 ```
 
@@ -207,16 +207,16 @@ Verify the release signatures before extraction to ensure cryptographic integrit
 gpg --locate-keys mail@mrmave.work
 
 # 2. Download Artifacts and Signatures
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz.sha256
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.1.2/ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz.asc
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.2.0/ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.2.0/ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz.sha256
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.2.0/ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz.asc
 
 # 3. Verify
-sha256sum -c ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz.sha256
-gpg --verify ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz.asc ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
+sha256sum -c ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz.sha256
+gpg --verify ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz.asc ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
 
 # 4. Extract
-tar -xzf ancaptcha-ffi-v0.1.2-linux-x86_64.tar.gz
+tar -xzf ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
 ```
 
 ## Security and Compliance
