@@ -57,7 +57,7 @@ pub fn verify_rotate(secret: &Secret, token: &str, submitted_values: &[&str]) ->
     let unscrambled = unscramble_slice(&mapper, submitted_values);
     let refs: Vec<&str> = unscrambled.iter().map(String::as_str).collect();
 
-    crate::styles::rotate::validate_rotate_solution(&payload, &refs)
+    crate::validator::rotate::validate_rotate_solution(&payload, &refs)
 }
 
 /// Verifies a Slider captcha submission.
@@ -72,7 +72,7 @@ pub fn verify_slider(secret: &Secret, token: &str, submitted_values: &[&str]) ->
     let unscrambled = unscramble_slice(&mapper, submitted_values);
     let refs: Vec<&str> = unscrambled.iter().map(String::as_str).collect();
 
-    crate::styles::slider::validate_slider_solution(&payload, &refs)
+    crate::validator::slider::validate_slider_solution(&payload, &refs)
 }
 
 /// Verifies a Find the Pair captcha submission.
@@ -89,7 +89,7 @@ pub fn verify_pair(secret: &Secret, token: &str, submitted_values: &[Vec<&str>])
         .map(|step| step.iter().map(String::as_str).collect())
         .collect();
 
-    crate::styles::pair::validate_pair_solution(&payload, &refs)
+    crate::validator::pair::validate_pair_solution(&payload, &refs)
 }
 
 fn find_token_in_form<S: std::hash::BuildHasher>(

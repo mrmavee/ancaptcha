@@ -18,7 +18,7 @@ pub mod config;
 pub mod crypto;
 pub mod engine;
 pub mod storage;
-pub mod styles;
+pub mod validator;
 pub mod verification;
 
 pub use common::assets;
