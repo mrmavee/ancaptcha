@@ -481,4 +481,21 @@ mod tests {
             );
         }
     }
+
+    #[test]
+    fn variant_faults() {
+        let mut cache = AssetCache::new(NoiseIntensity::Low);
+        cache.sources.insert("junk".to_string(), &[0, 1, 2, 3]);
+        assert!(cache.generate_rotate_variant("junk").is_none());
+        assert!(cache.generate_pair_variant("junk").is_none());
+        assert!(cache.generate_slider_variant("junk").is_none());
+    }
+
+    #[test]
+    fn cold_state() {
+        let cache = AssetCache::new(NoiseIntensity::Medium);
+        assert!(cache.get_image("a2").is_none());
+        assert!(cache.get_pair_image("a2").is_none());
+        assert!(cache.get_slider_pair("a2").is_none());
+    }
 }

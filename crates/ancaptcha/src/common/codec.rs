@@ -15,7 +15,11 @@ pub fn b64_encode_url_safe<T: AsRef<[u8]>>(input: T) -> String {
 ///
 /// Fails if the input string is not valid base64.
 pub fn b64_decode_url_safe<T: AsRef<[u8]>>(input: T) -> Result<Vec<u8>> {
-    Ok(URL_SAFE_NO_PAD.decode(input)?)
+    let bytes = input.as_ref();
+    if bytes.len() > 512 {
+        return Err(crate::common::error::AnCaptchaError::InvalidToken);
+    }
+    Ok(URL_SAFE_NO_PAD.decode(bytes)?)
 }
 
 /// Encodes bytes to standard base64.
@@ -39,7 +43,7 @@ pub fn salt_and_encode_b64(mut input: Vec<u8>) -> String {
 #[must_use]
 pub fn hex_to_rgba(hex: &str, alpha: f32) -> String {
     let raw = hex.trim_start_matches('#');
-    if raw.len() != 6 {
+    if raw.len() != 6 || !raw.chars().all(|c| c.is_ascii_hexdigit()) {
         return hex.to_string();
     }
 
@@ -48,4 +52,22 @@ pub fn hex_to_rgba(hex: &str, alpha: f32) -> String {
     let b = u8::from_str_radix(&raw[4..6], 16).unwrap_or(0);
 
     format!("rgba({r}, {g}, {b}, {alpha})")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn codec_limit() {
+        let identity_overflow = "a".repeat(513);
+        assert!(b64_decode_url_safe(&identity_overflow).is_err());
+    }
+
+    #[test]
+    fn hex_validation() {
+        assert_eq!(hex_to_rgba("#FFFFFF", 1.0), "rgba(255, 255, 255, 1)");
+        assert_eq!(hex_to_rgba("nothex", 1.0), "nothex");
+        assert_eq!(hex_to_rgba("FF00", 1.0), "FF00");
+    }
 }

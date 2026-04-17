@@ -62,7 +62,10 @@ impl NameMapper {
     }
 
     /// Pre-populates the mapper with identifiers required for specific captcha types.
-    pub fn warm_up(&mut self, steps: u8, captcha_type: &str) {
+    pub fn warm_up(&mut self, mut steps: u8, captcha_type: &str) {
+        if steps > 10 {
+            steps = 10;
+        }
         let core = [
             "container",
             "checkbox",
@@ -202,5 +205,16 @@ mod tests {
 
         assert_eq!(name1, name2);
         assert_ne!(name1, name3);
+    }
+
+    #[test]
+    fn warmup_limit() {
+        let mut mapper1 = NameMapper::new(1);
+        let mut mapper2 = NameMapper::new(1);
+
+        mapper1.warm_up(10, crate::common::CAPTCHA_TYPE_SLIDER);
+        mapper2.warm_up(200, crate::common::CAPTCHA_TYPE_SLIDER);
+
+        assert_eq!(mapper1.mapping.len(), mapper2.mapping.len());
     }
 }

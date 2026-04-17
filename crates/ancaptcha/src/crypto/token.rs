@@ -69,8 +69,13 @@ impl TokenPayload {
     ///
     /// Fails if the input data is malformed or not a valid payload.
     pub fn from_bytes(bytes: &[u8]) -> crate::common::error::Result<Self> {
-        let (payload, _) =
-            bincode_next::decode_from_slice(bytes, bincode_next::config::standard())?;
+        if bytes.len() > 1024 {
+            return Err(crate::common::error::AnCaptchaError::InvalidToken);
+        }
+        let (payload, _) = bincode_next::decode_from_slice(
+            bytes,
+            bincode_next::config::standard().with_limit::<1024>(),
+        )?;
         Ok(payload)
     }
 }
@@ -128,6 +133,13 @@ mod tests {
     fn invalid_bytes_handling() {
         let invalid_bytes = vec![0xFF, 0xFF, 0xFF];
         let result = TokenPayload::from_bytes(&invalid_bytes);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn deserialization_limit() {
+        let overflow_payload = vec![0u8; 2048];
+        let result = TokenPayload::from_bytes(&overflow_payload);
         assert!(result.is_err());
     }
 }

@@ -5,7 +5,14 @@ use crate::common::error::{AnCaptchaError, Result};
 use crate::crypto::token::TokenPayload;
 use std::collections::HashMap;
 
+const MAX_FORM_ENTRIES: usize = 100;
+const MAX_TOKEN_LEN: usize = 256;
+const MAX_SUBMISSION_STEPS: usize = 10;
+
 fn decode_token_payload(secret: &Secret, token: &str) -> Result<TokenPayload> {
+    if token.len() > MAX_TOKEN_LEN || token.len() < 40 {
+        return Err(AnCaptchaError::InvalidToken);
+    }
     let token_bytes = crate::common::b64_decode_url_safe(token)?;
     let plaintext = crate::crypto::cipher::decrypt(secret, &token_bytes)?;
     let payload = TokenPayload::from_bytes(&plaintext)?;
@@ -51,6 +58,9 @@ fn unscramble_vec_slice(
 ///
 /// Fails if the token is invalid, expired, or if internal verification fails.
 pub fn verify_rotate(secret: &Secret, token: &str, submitted_values: &[&str]) -> Result<bool> {
+    if submitted_values.len() > MAX_SUBMISSION_STEPS {
+        return Ok(false);
+    }
     let (payload, mapper) =
         prepare_verification(secret, token, crate::common::CAPTCHA_TYPE_ROTATE)?;
 
@@ -66,6 +76,9 @@ pub fn verify_rotate(secret: &Secret, token: &str, submitted_values: &[&str]) ->
 ///
 /// Fails if the token is invalid, expired, or if internal verification fails.
 pub fn verify_slider(secret: &Secret, token: &str, submitted_values: &[&str]) -> Result<bool> {
+    if submitted_values.len() > MAX_SUBMISSION_STEPS {
+        return Ok(false);
+    }
     let (payload, mapper) =
         prepare_verification(secret, token, crate::common::CAPTCHA_TYPE_SLIDER)?;
 
@@ -81,6 +94,9 @@ pub fn verify_slider(secret: &Secret, token: &str, submitted_values: &[&str]) ->
 ///
 /// Fails if the token is invalid, expired, or if internal verification fails.
 pub fn verify_pair(secret: &Secret, token: &str, submitted_values: &[Vec<&str>]) -> Result<bool> {
+    if submitted_values.len() > MAX_SUBMISSION_STEPS {
+        return Ok(false);
+    }
     let (payload, mapper) = prepare_verification(secret, token, crate::common::CAPTCHA_TYPE_PAIR)?;
 
     let unscrambled = unscramble_vec_slice(&mapper, submitted_values);
@@ -97,11 +113,10 @@ fn find_token_in_form<S: std::hash::BuildHasher>(
     form: &HashMap<String, Vec<String>, S>,
 ) -> Result<(String, String, TokenPayload)> {
     form.iter()
+        .take(MAX_FORM_ENTRIES)
         .find_map(|(key, vals)| {
-            vals.iter().find_map(|val| {
-                let token_bytes = crate::common::b64_decode_url_safe(val).ok()?;
-                let plaintext = crate::crypto::cipher::decrypt(secret, &token_bytes).ok()?;
-                let payload = TokenPayload::from_bytes(&plaintext).ok()?;
+            vals.iter().take(10).find_map(|val| {
+                let payload = decode_token_payload(secret, val).ok()?;
                 Some((key.clone(), val.clone(), payload))
             })
         })
@@ -299,5 +314,40 @@ mod tests {
         let s0_vals = unscrambled.get("_s0").ok_or(AnCaptchaError::InvalidToken)?;
         assert_eq!(s0_vals.first().ok_or(AnCaptchaError::InvalidToken)?, "v2");
         Ok(())
+    }
+
+    #[test]
+    fn limit_checks() {
+        let client_verification_secret = [0u8; 32];
+        let client_identity_token = "a".repeat(MAX_TOKEN_LEN + 1);
+
+        assert!(matches!(
+            verify_rotate(&client_verification_secret, &client_identity_token, &[]),
+            Err(AnCaptchaError::InvalidToken)
+        ));
+
+        let step_accumulation = vec!["v0"; MAX_SUBMISSION_STEPS + 1];
+        let placeholder_identity = "a".repeat(40);
+        assert!(matches!(
+            verify_rotate(
+                &client_verification_secret,
+                &placeholder_identity,
+                &step_accumulation
+            ),
+            Ok(false)
+        ));
+    }
+
+    #[test]
+    fn entry_limits() {
+        let secret = [0u8; 32];
+        let mut form = HashMap::new();
+        for i in 0..=MAX_FORM_ENTRIES {
+            form.insert(format!("k{i}"), vec!["v".to_string()]);
+        }
+        assert!(matches!(
+            unscramble_form(&secret, &form),
+            Err(AnCaptchaError::InvalidToken)
+        ));
     }
 }
