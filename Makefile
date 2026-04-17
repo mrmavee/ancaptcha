@@ -1,4 +1,4 @@
-.PHONY: all build assets test lint coverage clean env fuzz fuzz-all fuzz-stress-all stress fuzz-lint report $(FUZZ_TARGETS) $(addprefix fuzz-,$(FUZZ_TARGETS)) $(addprefix fuzz-stress-,$(FUZZ_TARGETS)) $(addprefix fuzz-cmin-,$(FUZZ_TARGETS))
+.PHONY: all build assets test lint deny coverage clean env fuzz fuzz-all fuzz-stress-all stress fuzz-lint report $(FUZZ_TARGETS) $(addprefix fuzz-,$(FUZZ_TARGETS)) $(addprefix fuzz-stress-,$(FUZZ_TARGETS)) $(addprefix fuzz-cmin-,$(FUZZ_TARGETS))
 
 FUZZ_TARGETS := token_payload verify_request submissions
 FUZZ_FLAGS ?= -runs=10000
@@ -27,7 +27,10 @@ fuzz-lint:
 report: fuzz-cmin
 	@cd fuzz && ./sync_report.sh
 
-lint: fuzz-lint
+deny:
+	@cargo deny --all-features check
+
+lint: fuzz-lint deny
 	@cargo fmt --all -- --check
 	@cargo clippy --all-features --all-targets -- -D warnings -D clippy::pedantic -D clippy::nursery
 
