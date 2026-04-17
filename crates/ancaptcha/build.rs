@@ -54,7 +54,7 @@ fn main() {
         let output_path = assets_output.join(format!("{file_stem}.webp"));
 
         if extension == "webp" {
-            let size = fs::metadata(&path).map(|m| m.len()).unwrap_or(u64::MAX);
+            let size = fs::metadata(&path).map_or(u64::MAX, |m| m.len());
             if size <= 5120 {
                 fs::copy(&path, &output_path).unwrap();
                 processed_files.push((file_stem.to_string(), output_path.clone()));
