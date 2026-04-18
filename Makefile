@@ -1,6 +1,6 @@
 .PHONY: all build assets test lint deny coverage clean env fuzz fuzz-all fuzz-stress-all stress fuzz-lint report $(FUZZ_TARGETS) $(addprefix fuzz-,$(FUZZ_TARGETS)) $(addprefix fuzz-stress-,$(FUZZ_TARGETS)) $(addprefix fuzz-cmin-,$(FUZZ_TARGETS))
 
-FUZZ_TARGETS := token_payload verify_request submissions
+FUZZ_TARGETS := ffi_bridge token_payload verify_request submissions
 FUZZ_FLAGS ?= -runs=10000
 HOURS ?= 2
 
@@ -51,14 +51,16 @@ clean:
 	@rm -f lcov.info
 
 $(FUZZ_TARGETS):
-	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $@ -- -dict=ancaptcha.dict $(FUZZ_FLAGS)
+	@DICT_ARG=""; if [ -f fuzz/$@.dict ]; then DICT_ARG="-dict=$@.dict"; fi; \
+	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $@ -- $$DICT_ARG $(FUZZ_FLAGS)
 
 fuzz: fuzz-all
 
 fuzz-all: $(FUZZ_TARGETS)
 
 $(addprefix fuzz-,$(FUZZ_TARGETS)): fuzz-%:
-	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $* -- -dict=ancaptcha.dict $(FUZZ_FLAGS)
+	@DICT_ARG=""; if [ -f fuzz/$*.dict ]; then DICT_ARG="-dict=$*.dict"; fi; \
+	cd fuzz && RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run $* -- $$DICT_ARG $(FUZZ_FLAGS)
 
 fuzz-stress-all:
 	@STRESS_SEC=$$(($(HOURS) * 3600)); \

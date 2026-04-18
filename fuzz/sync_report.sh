@@ -2,10 +2,14 @@
 set -e
 
 REPORT_FILE="../docs/SECURITY.md"
-TARGETS="token_payload verify_request submissions"
+TARGETS="ffi_bridge token_payload verify_request submissions"
 
 for target in $TARGETS; do
-    stats=$(RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run "$target" -- -runs=0 2>&1 | grep "DONE" | tail -n 1) || true
+    DICT_ARG=""
+    if [ -f "$target.dict" ]; then
+        DICT_ARG="-dict=$target.dict"
+    fi
+    stats=$(RUSTFLAGS="-C lto=off -C strip=none" cargo +nightly fuzz run "$target" -- $DICT_ARG -runs=0 2>&1 | grep "DONE" | tail -n 1) || true
     
     if [ -n "$stats" ]; then
         cov=$(echo "$stats" | grep -oP 'cov: \K[0-9]+' || echo "0")

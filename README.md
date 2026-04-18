@@ -15,6 +15,7 @@
 
 [Security](docs/SECURITY.md)
 
+
 </div>
 
 <details>
@@ -221,12 +222,7 @@ tar -xzf ancaptcha-ffi-v0.2.0-linux-x86_64.tar.gz
 
 ## Security and Compliance
 
-The library underwent the following verifications:
-
-- **Dependency Audit**: Verified for known vulnerabilities using `cargo audit`.
-- **Licensing/Advisory Check**: Verified compliance using `cargo deny`.
-- **Memory Safety**: Audited with Valgrind (`memcheck`) during FFI integration testing. Verified **0 bytes definitely lost** across the C-ABI boundary.
-- **Cryptographic Integrity**: Authenticated encryption (ChaCha20-Poly1305) prevents token tampering and enforces strict TTL-based expiration.
+Continuous fuzzing and dependency auditing are integrated into the development process. Testing covers edge-case discovery in the verification engine and memory safety verification for the FFI bridge. The dependency manifest is also audited for security vulnerabilities and compliance. All security documentation, including fuzzing statistics, memory safety reports, and dependency audit logs, is available in [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Repositories
 

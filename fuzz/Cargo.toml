@@ -11,6 +11,7 @@ cargo-fuzz = true
 
 [dependencies]
 ancaptcha = { version = "0.2.0", path = "../crates/ancaptcha" }
+ancaptcha-ffi = { version = "0.2.0", path = "../crates/ancaptcha-ffi" }
 arbitrary = { version = "1.4.2", features = ["derive"] }
 libfuzzer-sys = "0.4"
 
@@ -31,6 +32,13 @@ bench = false
 [[bin]]
 name = "submissions"
 path = "fuzz_targets/submissions.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "ffi_bridge"
+path = "fuzz_targets/ffi_bridge.rs"
 test = false
 doc = false
 bench = false

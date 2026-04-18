@@ -30,3 +30,4 @@ dev.sh
 release.sh
 .cargo/credentials.toml
 publish.sh
+/valgrind/
