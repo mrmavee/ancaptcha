@@ -5,7 +5,7 @@ use crate::config::Config;
 use crate::verification::factory::{
     CaptchaBundle, generate_pair_bundle, generate_rotate_bundle, generate_slider_bundle,
 };
-use crate::verification::validator::{verify_pair, verify_rotate, verify_slider};
+use crate::verification::resolver::{verify_pair, verify_rotate, verify_slider};
 
 /// Entry point for captcha operations.
 pub struct AnCaptcha {
@@ -87,7 +87,7 @@ impl AnCaptcha {
         form_data: &std::collections::HashMap<String, Vec<String>, S>,
     ) -> Result<bool> {
         let (payload, unscrambled, captcha_type) =
-            crate::verification::validator::unscramble_form(&self.config.secret, form_data)?;
+            crate::verification::resolver::unscramble_form(&self.config.secret, form_data)?;
 
         let difficulty = match payload.difficulty {
             1 => crate::Difficulty::Easy,
@@ -176,7 +176,7 @@ mod tests {
         form.insert(mapper.get_or_create("s0"), vec![v_obf]);
 
         let (discovered_payload, _, _) =
-            crate::verification::validator::unscramble_form(&secret, &form)?;
+            crate::verification::resolver::unscramble_form(&secret, &form)?;
         assert_eq!(discovered_payload.seed, payload.seed);
         assert!(ac.verify_request(&form)?);
         Ok(())
