@@ -48,11 +48,11 @@ func New(secret []byte) (*Client, error) {
 	if len(secret) != secretLen {
 		return nil, errors.New("secret must be 32 bytes")
 	}
-	
+
 	if res := C.anCaptcha_set_config((*C.uint8_t)(unsafe.Pointer(&secret[0])), diffMed); int32(res) != 0 {
 		return nil, errors.New("init failed: " + getLastError())
 	}
-	
+
 	return &Client{}, nil
 }
 
@@ -99,7 +99,7 @@ func (a *Client) Generate(kind, diff string, errorMsg string) (*Bundle, error) {
 	if int32(res) != 0 {
 		return nil, errors.New("generation failed: " + getLastError())
 	}
-	
+
 	defer C.anCaptcha_free_string(tOut)
 	defer C.anCaptcha_free_string(hOut)
 	defer C.anCaptcha_free_string(cOut)
@@ -107,7 +107,7 @@ func (a *Client) Generate(kind, diff string, errorMsg string) (*Bundle, error) {
 	return &Bundle{
 		Token: C.GoString(tOut),
 		HTML:  template.HTML(C.GoString(hOut)), //nolint:gosec
-		CSS:   template.CSS(C.GoString(cOut)), //nolint:gosec
+		CSS:   template.CSS(C.GoString(cOut)),  //nolint:gosec
 	}, nil
 }
 
@@ -130,7 +130,7 @@ func (a *Client) Verify(formData string) (bool, error) {
 }
 
 // SetTheme configures the visual presentation of the captcha interface.
-func (a *Client) SetTheme(bg, border, text, accent, error, font string) error {
+func (a *Client) SetTheme(bg, border, text, accent, errColor, font string) error {
 	cBg := C.CString(bg)
 	defer C.free(unsafe.Pointer(cBg))
 	cBrd := C.CString(border)
@@ -139,7 +139,7 @@ func (a *Client) SetTheme(bg, border, text, accent, error, font string) error {
 	defer C.free(unsafe.Pointer(cTxt))
 	cAcc := C.CString(accent)
 	defer C.free(unsafe.Pointer(cAcc))
-	cErr := C.CString(error)
+	cErr := C.CString(errColor)
 	defer C.free(unsafe.Pointer(cErr))
 	cFnt := C.CString(font)
 	defer C.free(unsafe.Pointer(cFnt))

@@ -20,6 +20,7 @@ import (
 )
 
 var tmpl = template.Must(template.ParseGlob("templates/*.html"))
+
 // Use a real 32-byte key from env vars in production.
 // Generate with: `openssl rand -hex 32`
 var captcha *ancaptcha.Client
@@ -30,6 +31,7 @@ const (
 	readTimeout  = 5 * time.Second
 	writeTimeout = 10 * time.Second
 	minPathParts = 2
+	maxBodySize  = 1 << 20
 )
 
 // Initializes the anCaptcha client and triggers asset warming.
@@ -134,6 +136,7 @@ func handleCaptcha(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == "POST" {
+		r.Body = http.MaxBytesReader(w, r.Body, maxBodySize)
 		_ = r.ParseForm()
 
 		formData := r.Form.Encode()
