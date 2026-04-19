@@ -3,7 +3,7 @@
 /**
  * Exception thrown for errors within the anCaptcha library.
  */
-class AnCaptchaError extends Exception {}
+final class AnCaptchaError extends Exception {}
 
 /**
  * Interface for the anCaptcha FFI bridge.
@@ -11,7 +11,7 @@ class AnCaptchaError extends Exception {}
  * This class uses the PHP FFI extension to interact with the Rust-based engine.
  * It provides stateless captcha generation and automated form verification.
  */
-class AnCaptcha
+final class AnCaptcha
 {
     private FFI $ffi;
 

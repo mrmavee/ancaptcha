@@ -1,3 +1,4 @@
+<?php
 /**
  * anCaptcha integration example for PHP FFI.
  *
