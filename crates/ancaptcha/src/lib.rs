@@ -1,8 +1,8 @@
-//! anCaptcha: A No-JS, stateless captcha engine implemented in Rust for cross-language integration.
+//! anCaptcha: Stateless human verification engine using interactive CSS instead of JavaScript.
 //!
-//! Originally designed for the darknet, specifically for Tor hidden services, to provide human
-//! verification without requiring JavaScript. It uses authenticated encryption (ChaCha20-Poly1305)
-//! to store challenge state in tokens, eliminating the need for server-side sessions.
+//! Originally designed for Tor Browser's "Safest" mode where JavaScript is strictly disabled.
+//! It uses authenticated encryption (ChaCha20-Poly1305) to store challenge state in tokens,
+//! eliminating the need for server-side sessions.
 //!
 //! (c) 2026 Maverick. Licensed under Apache License, Version 2.0.
 #![forbid(unsafe_code)]

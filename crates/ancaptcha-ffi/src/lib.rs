@@ -1,8 +1,8 @@
 //! anCaptcha FFI: C-compatible bridge for the anCaptcha engine.
 //!
-//! Provides a stable C-ABI for integrating anCaptcha's No-JS, stateless verification
-//! into various languages supporting C interop (such as Go, Python, and PHP).
-//! Built for darknet and Tor hidden services where JavaScript is often restricted.
+//! C-ABI for integrating stateless human verification using
+//! interactive CSS into foreign languages. Built for Tor Browser's
+//! "Safest" mode where JavaScript is restricted.
 //!
 //! (c) 2026 Maverick. Licensed under Apache License, Version 2.0.
 

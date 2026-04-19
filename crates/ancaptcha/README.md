@@ -50,9 +50,4 @@ You can verify the raw form-data directly (automatic) or verify individual value
 let is_valid = ac.verify_request(&form_map).unwrap_or(false);
 ```
 
-## Features
-
-- `std`: Enabled by default.
-- `rayon`: Parallel asset pre-computation.
-
 (c) 2026 Maverick. Apache-2.0.
