@@ -83,12 +83,11 @@ fn append_trigger_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme, layo
         "#{}:checked+.{} .{}::after{{display:block !important;}}",
         ids.checkbox_id, ids.label_class, ids.checkbox_inner
     );
+    let tint = crate::common::hex_to_rgba(&ac, 0.05);
     let _ = write!(
         css,
-        "#{}:checked~.{} {{border-color:{ac} !important;background:{} !important;}}",
-        ids.completed_id,
-        ids.label_class,
-        crate::common::hex_to_rgba(&ac, 0.05)
+        "#{}:checked~.{} {{border-color:{ac} !important;background-color:{bg} !important;background-image:linear-gradient({tint},{tint}) !important;}}",
+        ids.completed_id, ids.label_class
     );
     let _ = write!(
         css,
