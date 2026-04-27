@@ -15,17 +15,17 @@ The FFI boundary and core library are periodically audited using automated instr
 
 Core logic is continuously stressed using `cargo-fuzz` (libFuzzer) to ensure memory safety and zero panics.
 
-- **Corpus**: 1683 seeds (6.7M, minimized)
+- **Corpus**: 1914 seeds (7.6M, minimized)
 - **Crashes Found**: 0
-- **Last Updated**: 2026-04-19
+- **Last Updated**: 2026-04-27
 
 ### Statistics
 | Target | Coverage | Features | Corpus |
 |--------|----------|----------|--------|
 | `token_payload` | 510 | 775 | 33/13154b |
-| `verify_request` | 902 | 5696 | 607/297Kb |
+| `verify_request` | 901 | 5746 | 630/277Kb |
 | `submissions` | 983 | 1683 | 158/18Kb |
-| `ffi_bridge` | 4537 | 14205 | 825/306Kb |
+| `ffi_bridge` | 4540 | 15121 | 959/386Kb |
 
 ### Target Descriptions
 - `token_payload`: Fuzzes `ancaptcha::crypto::cipher::decrypt` (ChaCha20-Poly1305) and `ancaptcha::crypto::token::TokenPayload::from_bytes` (bincode deserialization) to ensure robust handling of malformed or corrupted data.
