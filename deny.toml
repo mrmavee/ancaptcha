@@ -40,14 +40,18 @@ skip = [
 
     # rand_core follows the distribution of getrandom across different toolchains.
     { name = "rand_core", version = "0.6.4" },
-    { name = "rand_core", version = "0.10.0" },
+    { name = "rand_core", version = "0.10.1" },
+
+    # wit-bindgen is pulled as a transitive dependency by wasip2/3 via getrandom.
+    { name = "wit-bindgen", version = "0.51.0" },
+    { name = "wit-bindgen", version = "0.57.1" },
 
     # r-efi and winnow are pulled as transitive dependencies by different versions of
     # toolchains like cbindgen and its TOML parsers.
     { name = "r-efi", version = "5.3.0" },
     { name = "r-efi", version = "6.0.0" },
     { name = "winnow", version = "0.7.15" },
-    { name = "winnow", version = "1.0.1" },
+    { name = "winnow", version = "1.0.2" },
 ]
 skip-tree = []
 
