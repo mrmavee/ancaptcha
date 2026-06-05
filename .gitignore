@@ -31,3 +31,4 @@ release.sh
 .cargo/credentials.toml
 publish.sh
 /valgrind/
+.wakatime-project

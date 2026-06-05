@@ -151,14 +151,14 @@ func (a *Client) SetTheme(bg, border, text, accent, errColor, font string) error
 }
 
 // SetLayout configures the structural dimensions and spacing.
-func (a *Client) SetLayout(width, maxWidth, margin, height, padding, checkboxSize string) error {
+func (a *Client) SetLayout(width, maxWidth, margin, minHeight, padding, checkboxSize string) error {
 	cW := C.CString(width)
 	defer C.free(unsafe.Pointer(cW))
 	cMW := C.CString(maxWidth)
 	defer C.free(unsafe.Pointer(cMW))
 	cM := C.CString(margin)
 	defer C.free(unsafe.Pointer(cM))
-	cH := C.CString(height)
+	cH := C.CString(minHeight)
 	defer C.free(unsafe.Pointer(cH))
 	cP := C.CString(padding)
 	defer C.free(unsafe.Pointer(cP))
@@ -167,6 +167,17 @@ func (a *Client) SetLayout(width, maxWidth, margin, height, padding, checkboxSiz
 
 	if res := C.anCaptcha_set_layout(cW, cMW, cM, cH, cP, cBS); int32(res) != 0 {
 		return errors.New("failed to set layout: " + getLastError())
+	}
+	return nil
+}
+
+// SetSize configures the component size profile.
+func (a *Client) SetSize(size string) error {
+	cSize := C.CString(size)
+	defer C.free(unsafe.Pointer(cSize))
+
+	if res := C.anCaptcha_set_size(cSize); int32(res) != 0 {
+		return errors.New("failed to set size: " + getLastError())
 	}
 	return nil
 }

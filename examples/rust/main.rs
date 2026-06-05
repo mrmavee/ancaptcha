@@ -248,7 +248,7 @@ fn render_captcha(diff: Difficulty, kind: &str, status: &VerificationStatus) -> 
         _ => None,
     };
 
-    let ancaptcha = AnCaptcha::new(Config::new(*get_secret()).with_difficulty(diff));
+    let ancaptcha = AnCaptcha::new(Config::new(*get_secret()).with_difficulty(diff).with_size(ancaptcha::Size::Large));
 
     let bundle_res = match kind {
         "Rotate" => ancaptcha.generate_rotate(err_msg),

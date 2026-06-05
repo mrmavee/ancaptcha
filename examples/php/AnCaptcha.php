@@ -148,10 +148,20 @@ final class AnCaptcha
     /**
      * Updates the structural layout configuration.
      */
-    public function setLayout(string $width, string $maxWidth, string $margin, string $height, string $padding, string $checkboxSize): void
+    public function setLayout(string $width, string $maxWidth, string $margin, string $minHeight, string $padding, string $checkboxSize): void
     {
-        if ($this->ffi->anCaptcha_set_layout($width, $maxWidth, $margin, $height, $padding, $checkboxSize) !== 0) {
+        if ($this->ffi->anCaptcha_set_layout($width, $maxWidth, $margin, $minHeight, $padding, $checkboxSize) !== 0) {
             throw new AnCaptchaError("Failed to set layout: " . $this->getLastError());
+        }
+    }
+
+    /**
+     * Updates the component size profile.
+     */
+    public function setSize(string $size): void
+    {
+        if ($this->ffi->anCaptcha_set_size($size) !== 0) {
+            throw new AnCaptchaError("Failed to set size: " . $this->getLastError());
         }
     }
 

@@ -37,6 +37,7 @@ SECRET_KEY = bytes([0] * 32)
 
 try:
     captcha_lib = AnCaptcha(LIB_PATH, SECRET_KEY)
+    captcha_lib.set_size("large")
 
     def warmup_task() -> None:
         """Run the captcha warmup process in the background."""

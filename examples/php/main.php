@@ -17,8 +17,10 @@
 require_once __DIR__ . "/AnCaptcha.php";
 
 // Environment-aware paths for the FFI library and header.
-$header_path = getenv("ANCAPTCHA_HEADER_PATH") ?: __DIR__ . "/ancaptcha-ffi.h";
-$lib_path = getenv("ANCAPTCHA_LIB_PATH") ?: __DIR__ . "/libancaptcha_ffi.so";
+$env_header = getenv("ANCAPTCHA_HEADER_PATH");
+$header_path = is_string($env_header) && $env_header !== "" ? $env_header : __DIR__ . "/ancaptcha-ffi.h";
+$env_lib = getenv("ANCAPTCHA_LIB_PATH");
+$lib_path = is_string($env_lib) && $env_lib !== "" ? $env_lib : __DIR__ . "/libancaptcha_ffi.so";
 
 // Use a real 32-byte key from env vars in production.
 // Generate with: `openssl rand -hex 32`
@@ -26,6 +28,7 @@ $secret = str_repeat("\0", 32);
 
 try {
     $captcha = new AnCaptcha($lib_path, $header_path, $secret);
+    $captcha->setSize("large");
     
     // Asset pre-computation is triggered synchronously here for demonstration.
     $captcha->warmUp('rotate');

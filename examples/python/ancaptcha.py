@@ -108,6 +108,9 @@ class AnCaptcha:
         ]
         self._lib.anCaptcha_set_layout.restype = CInt
 
+        self._lib.anCaptcha_set_size.argtypes = [CCharP]
+        self._lib.anCaptcha_set_size.restype = CInt
+
         self._lib.anCaptcha_warm_up.argtypes = [CInt]
         self._lib.anCaptcha_warm_up.restype = CInt
 
@@ -227,12 +230,19 @@ class AnCaptcha:
             layout.get("width", "").encode("utf-8"),
             layout.get("max_width", "").encode("utf-8"),
             layout.get("margin", "").encode("utf-8"),
-            layout.get("height", "").encode("utf-8"),
+            layout.get("min_height", "").encode("utf-8"),
             layout.get("padding", "").encode("utf-8"),
             layout.get("checkbox_size", "").encode("utf-8"),
         )
         if res != 0:
             msg = f"Failed to set layout: {self._get_last_error()}"
+            raise AnCaptchaError(msg)
+
+    def set_size(self, size: str) -> None:
+        """Configure the component size profile."""
+        res = self._lib.anCaptcha_set_size(size.encode("utf-8"))
+        if res != 0:
+            msg = f"Failed to set size: {self._get_last_error()}"
             raise AnCaptchaError(msg)
 
     def warm_up(self, kind: CaptchaType) -> None:

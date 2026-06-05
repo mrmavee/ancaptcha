@@ -42,6 +42,7 @@ func init() {
 	if err != nil {
 		log.Fatalf("Critical init error: %v", err)
 	}
+	_ = captcha.SetSize("large")
 
 	// Warm up asset variations in a background goroutine.
 	go func() {
