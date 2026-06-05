@@ -11,6 +11,7 @@ pub fn generate_base_css(
     ids: &ObfuscatedIds,
     theme: &Theme,
     layout: &Layout,
+    size: &crate::config::Size,
 ) -> String {
     let mut css = String::with_capacity(1024);
 
@@ -19,9 +20,10 @@ pub fn generate_base_css(
     let m = html_escape::encode_text(&layout.margin);
     let ff = html_escape::encode_text(&theme.font_family);
 
+    let base_fs = size.base_font_size();
     let _ = write!(
         css,
-        "#{id}{{max-width:{mw} !important;width:{w} !important;margin:{m} !important;position:relative !important;font-family:{ff} !important;}}",
+        "#{id}{{font-size:{base_fs}px !important;max-width:{mw} !important;width:{w} !important;margin:{m} !important;position:relative !important;font-family:{ff} !important;}}",
         id = ids.container_id
     );
 
@@ -52,12 +54,12 @@ fn append_trigger_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme, layo
 
     let _ = write!(
         css,
-        ".{}{{display:flex !important;align-items:center !important;border:1px solid {bc} !important;border-radius:3px !important;padding:{p} !important;background:{bg} !important;cursor:pointer !important;min-height:{h} !important;box-sizing:border-box !important;transition:border-color 0.2s,box-shadow 0.2s !important;width:100% !important;}}",
+        ".{}{{display:flex !important;align-items:center !important;border:0.0625em solid {bc} !important;border-radius:0.1875em !important;padding:{p} !important;background:{bg} !important;cursor:pointer !important;min-height:{h} !important;box-sizing:border-box !important;transition:border-color 0.2s,box-shadow 0.2s !important;width:100% !important;}}",
         ids.label_class
     );
     let _ = write!(
         css,
-        ".{}:hover{{border-color:{ac} !important;box-shadow:0 1px 3px {} !important;}}",
+        ".{}:hover{{border-color:{ac} !important;box-shadow:0 0.0625em 0.1875em {} !important;}}",
         ids.label_class,
         crate::common::hex_to_rgba(&tc, 0.08)
     );
@@ -70,12 +72,12 @@ fn append_trigger_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme, layo
 
     let _ = write!(
         css,
-        ".{}{{width:{cs} !important;height:{cs} !important;border:2px solid {bc} !important;border-radius:2px !important;background:{bg} !important;display:inline-block !important;flex-shrink:0 !important;margin-right:0.8rem !important;position:relative !important;margin-top:0 !important;margin-bottom:0 !important;margin-left:0 !important;}}",
+        ".{}{{width:{cs} !important;height:{cs} !important;border:0.125em solid {bc} !important;border-radius:0.125em !important;background:{bg} !important;display:inline-block !important;flex-shrink:0 !important;margin-right:0.8em !important;position:relative !important;margin-top:0 !important;margin-bottom:0 !important;margin-left:0 !important;}}",
         ids.checkbox_inner
     );
     let _ = write!(
         css,
-        ".{}::after{{content:'' !important;position:absolute !important;top:10% !important;left:35% !important;width:25% !important;height:55% !important;border:solid {ac} !important;border-width:0 3px 3px 0 !important;transform:rotate(45deg) !important;display:none !important;}}",
+        ".{}::after{{content:'' !important;position:absolute !important;top:10% !important;left:35% !important;width:25% !important;height:55% !important;border:solid {ac} !important;border-width:0 0.1875em 0.1875em 0 !important;transform:rotate(45deg) !important;display:none !important;}}",
         ids.checkbox_inner
     );
     let _ = write!(
@@ -104,7 +106,7 @@ fn append_brand_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme) {
 
     let _ = write!(
         css,
-        ".{}{{flex-grow:1 !important;font-size:0.95rem !important;color:{tc} !important;font-weight:600 !important;line-height:1.2 !important;margin-top:0.1rem !important;}}",
+        ".{}{{flex-grow:1 !important;font-size:0.95em !important;color:{tc} !important;font-weight:600 !important;line-height:1.2 !important;margin-top:0.1em !important;}}",
         ids.captcha_text
     );
     let eff = if ff.is_empty() {
@@ -114,16 +116,16 @@ fn append_brand_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme) {
     };
     let _ = write!(
         css,
-        ".{}{{margin-left:auto !important;font-family:{eff} !important;font-size:1.1rem !important;color:{tc} !important;letter-spacing:-0.5px !important;display:flex !important;align-items:center !important;opacity:0.9 !important;white-space:nowrap !important;}}",
+        ".{}{{margin-left:auto !important;font-family:{eff} !important;font-size:1.1em !important;color:{tc} !important;letter-spacing:-0.03em !important;display:flex !important;align-items:center !important;opacity:0.9 !important;white-space:nowrap !important;}}",
         ids.logo_wrapper
     );
     let lsh = format!(
-        "inset 0 0 0 3px {ac},inset 0 0 0 5px {bg},inset 0 0 0 7px {}",
+        "inset 0 0 0 0.1875em {ac},inset 0 0 0 0.3125em {bg},inset 0 0 0 0.4375em {}",
         crate::common::hex_to_rgba(&ac, 0.3)
     );
     let _ = write!(
         css,
-        ".{}{{width:1.25rem !important;height:1.25rem !important;border-radius:50% !important;margin-right:0.5rem !important;box-shadow:{lsh} !important;flex-shrink:0 !important;opacity:0.7 !important;}}",
+        ".{}{{width:1.25em !important;height:1.25em !important;border-radius:50% !important;margin-right:0.5em !important;box-shadow:{lsh} !important;flex-shrink:0 !important;opacity:0.7 !important;}}",
         ids.logo_icon
     );
     let _ = write!(
@@ -137,7 +139,7 @@ fn append_error_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme) {
     let ec = html_escape::encode_text(&theme.error_color);
     let _ = write!(
         css,
-        ".{}{{color:{ec} !important;font-size:14px !important;margin-top:10px !important;text-align:center !important;font-weight:600 !important;}}",
+        ".{}{{color:{ec} !important;font-size:0.875em !important;margin-top:0.625em !important;text-align:center !important;font-weight:600 !important;}}",
         ids.error_class
     );
     let _ = write!(
@@ -147,7 +149,7 @@ fn append_error_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme) {
     );
     let _ = write!(
         css,
-        "@keyframes shake{{10%,90%{{transform:translateX(-1px);}}20%,80%{{transform:translateX(2px);}}30%,50%,70%{{transform:translateX(-4px);}}40%,60%{{transform:translateX(4px);}}}}"
+        "@keyframes shake{{10%,90%{{transform:translateX(-0.0625em);}}20%,80%{{transform:translateX(0.125em);}}30%,50%,70%{{transform:translateX(-0.25em);}}40%,60%{{transform:translateX(0.25em);}}}}"
     );
 }
 
@@ -160,7 +162,8 @@ mod tests {
         let ids = ObfuscatedIds::default();
         let theme = Theme::default();
         let layout = Layout::default();
-        let css = generate_base_css(false, &ids, &theme, &layout);
+        let size = crate::config::Size::default();
+        let css = generate_base_css(false, &ids, &theme, &layout, &size);
         assert!(css.contains(&format!("#{}", ids.container_id)));
         assert!(css.contains(&format!("#{}", ids.checkbox_id)));
         assert!(css.contains(&format!(".{}", ids.label_class)));
@@ -171,7 +174,8 @@ mod tests {
         let ids = ObfuscatedIds::default();
         let theme = Theme::default();
         let layout = Layout::default();
-        let css = generate_base_css(true, &ids, &theme, &layout);
+        let size = crate::config::Size::default();
+        let css = generate_base_css(true, &ids, &theme, &layout, &size);
         assert!(css.contains("shake"));
         assert!(css.contains("@keyframes"));
     }

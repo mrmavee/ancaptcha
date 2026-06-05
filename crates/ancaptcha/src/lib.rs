@@ -23,7 +23,7 @@ pub mod verification;
 
 pub use common::assets;
 pub use common::error::{AnCaptchaError, Result};
-pub use config::{CaptchaStyle, Config, Difficulty, Layout, NoiseIntensity, Theme};
+pub use config::{CaptchaStyle, Config, Difficulty, Layout, NoiseIntensity, Size, Theme};
 pub use crypto::token::DEFAULT_TTL_SECONDS;
 pub use engine::{CaptchaRequest, generate_full_captcha};
 pub use storage::{AssetCache, get_cache, init_cache, init_with_intensity};

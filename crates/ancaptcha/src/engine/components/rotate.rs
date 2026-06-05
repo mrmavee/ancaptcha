@@ -194,7 +194,7 @@ pub fn generate_rotate_css(config: &mut RotateConfig) -> String {
     let shadow_color = crate::common::hex_to_rgba(&text_color, 0.2);
     let _ = write!(
         css,
-        ".{modal_class}{{display:none !important;position:absolute !important;bottom:calc(100% + 10px) !important;left:50% !important;transform:translateX(-50%) !important;width:280px !important;max-width:90vw !important;background:{bg_color} !important;border-radius:4px !important;box-shadow:0 2px 10px {shadow_color} !important;padding:15px !important;z-index:1000 !important;box-sizing:border-box !important;border:1px solid {border_color} !important;}}"
+        ".{modal_class}{{display:none !important;position:absolute !important;bottom:calc(100% + 0.625em) !important;left:50% !important;transform:translateX(-50%) !important;width:17.5em !important;max-width:90vw !important;background:{bg_color} !important;border-radius:0.25em !important;box-shadow:0 0.125em 0.625em {shadow_color} !important;padding:0.9375em !important;z-index:1000 !important;box-sizing:border-box !important;border:0.0625em solid {border_color} !important;}}"
     );
 
     let ti_class = config.mapper.get_or_create("ti");
@@ -205,15 +205,15 @@ pub fn generate_rotate_css(config: &mut RotateConfig) -> String {
 
     let _ = write!(
         css,
-        ".{ti_class}{{font-size:16px !important;font-weight:bold !important;text-align:center !important;margin-bottom:15px !important;color:{text_color} !important;}}"
+        ".{ti_class}{{font-size:1em !important;font-weight:bold !important;text-align:center !important;margin-bottom:0.9375em !important;color:{text_color} !important;}}"
     );
     let _ = write!(
         css,
-        ".{im_w_class}{{width:120px !important;height:120px !important;margin:0 auto 10px !important;border-radius:50% !important;overflow:hidden !important;border:3px solid {accent_color} !important;position:relative !important;}}"
+        ".{im_w_class}{{width:7.5em !important;height:7.5em !important;margin:0 auto 0.625em !important;border-radius:50% !important;overflow:hidden !important;border:0.1875em solid {accent_color} !important;position:relative !important;}}"
     );
     let _ = write!(
         css,
-        ".{st_i_class}{{font-size:14px !important;font-weight:bold !important;text-align:center !important;margin-bottom:15px !important;color:{text_color} !important;}}"
+        ".{st_i_class}{{font-size:0.875em !important;font-weight:bold !important;text-align:center !important;margin-bottom:0.9375em !important;color:{text_color} !important;}}"
     );
     let _ = write!(
         css,
@@ -261,22 +261,25 @@ fn write_rotate_individual_css(css: &mut String, config: &mut RotateConfig) {
 fn write_rotate_sprite_css(css: &mut String, config: &mut RotateConfig) {
     let steps = config.difficulty.steps();
     let sprite_b64 = config.images_base64.first().copied().unwrap_or("");
-    let cell_w = 120;
     let sprite_class = config.mapper.get_or_create("ispr");
 
     let _ = write!(
         css,
-        ".anc_{} .{sprite_class}{{width:100% !important;height:100% !important;background-image:url(data:image/jpeg;base64,{sprite_b64}) !important;background-size:{}px 100% !important;transition:transform 0.3s !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;}}",
+        ".anc_{} .{sprite_class}{{width:100% !important;height:100% !important;background-image:url(data:image/jpeg;base64,{sprite_b64}) !important;background-size:{}% 100% !important;transition:transform 0.3s !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;}}",
         config.token,
-        i32::from(steps) * cell_w
+        u32::from(steps) * 100
     );
 
     for step in 0..steps {
         let img_data_class = config.mapper.get_or_create(&format!("id{step}"));
-        let x_off = i32::from(step) * -cell_w;
+        let x_off_pct = if steps > 1 {
+            (u32::from(step) * 100) / u32::from(steps - 1)
+        } else {
+            0
+        };
         let _ = write!(
             css,
-            ".{img_data_class}{{background-position:{x_off}px 0 !important;}}"
+            ".{img_data_class}{{background-position:{x_off_pct}% 0 !important;}}"
         );
     }
 }
@@ -295,11 +298,11 @@ fn write_rotate_controls_css(
 
     let _ = write!(
         css,
-        ".{controls_class}{{display:flex !important;flex-direction:column !important;gap:10px !important;width:100% !important;}}"
+        ".{controls_class}{{display:flex !important;flex-direction:column !important;gap:0.625em !important;width:100% !important;}}"
     );
     let _ = write!(
         css,
-        ".{btn_class}{{display:block !important;width:100% !important;padding:10px !important;border:none !important;border-radius:4px !important;background:{bg} !important;color:{tc} !important;border:1px solid {bc} !important;font-weight:bold !important;cursor:pointer !important;text-align:center !important;box-sizing:border-box !important;text-decoration:none !important;transition:background 0.2s,transform 0.1s !important;user-select:none !important;}}"
+        ".{btn_class}{{display:block !important;width:100% !important;padding:0.625em !important;border:none !important;border-radius:0.25em !important;background:{bg} !important;color:{tc} !important;border:0.0625em solid {bc} !important;font-weight:bold !important;cursor:pointer !important;text-align:center !important;box-sizing:border-box !important;text-decoration:none !important;transition:background 0.2s,transform 0.1s !important;user-select:none !important;}}"
     );
     let _ = write!(css, ".{btn_class}:hover{{opacity:0.8 !important;}}");
     let _ = write!(

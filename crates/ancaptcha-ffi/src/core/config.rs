@@ -12,6 +12,8 @@ static THEME: LazyLock<RwLock<ancaptcha::Theme>> =
     LazyLock::new(|| RwLock::new(ancaptcha::Theme::default()));
 static LAYOUT: LazyLock<RwLock<ancaptcha::Layout>> =
     LazyLock::new(|| RwLock::new(ancaptcha::Layout::default()));
+static SIZE: LazyLock<RwLock<ancaptcha::Size>> =
+    LazyLock::new(|| RwLock::new(ancaptcha::Size::default()));
 
 /// Returns the globally configured secret key.
 pub fn get_secret() -> Option<&'static [u8; 32]> {
@@ -30,6 +32,11 @@ pub fn get_layout() -> ancaptcha::Layout {
     LAYOUT
         .read()
         .map_or_else(|_| ancaptcha::Layout::default(), |l| l.clone())
+}
+
+pub fn get_size() -> ancaptcha::Size {
+    SIZE.read()
+        .map_or_else(|_| ancaptcha::Size::default(), |s| *s)
 }
 
 #[unsafe(no_mangle)]
@@ -68,6 +75,42 @@ pub unsafe extern "C" fn anCaptcha_set_config(secret: *const u8, noise_intensity
 
         let _ = SECRET.set(key);
         Status::Ok as i32
+    })
+}
+
+#[unsafe(no_mangle)]
+/// Configures the component size profile.
+///
+/// # Safety
+///
+/// `size` must be a valid null-terminated C string.
+pub unsafe extern "C" fn anCaptcha_set_size(size: *const c_char) -> i32 {
+    catch_panic!({
+        if size.is_null() {
+            return Status::Ok as i32;
+        }
+        let s = unsafe { CStr::from_ptr(size) }
+            .to_string_lossy()
+            .to_lowercase();
+        let parsed_size = match s.as_str() {
+            "small" => ancaptcha::Size::Small,
+            "medium" => ancaptcha::Size::Medium,
+            "large" => ancaptcha::Size::Large,
+            _ => {
+                set_error("Invalid size value");
+                return Status::ErrCrypto as i32;
+            }
+        };
+        SIZE.write().map_or_else(
+            |_| {
+                set_error("Size lock poisoned");
+                Status::ErrCrypto as i32
+            },
+            |mut lock| {
+                *lock = parsed_size;
+                Status::Ok as i32
+            },
+        )
     })
 }
 

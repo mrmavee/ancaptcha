@@ -13,6 +13,15 @@
 int32_t anCaptcha_set_config(const uint8_t *secret, int32_t noise_intensity);
 
 /**
+ * Configures the component size profile.
+ *
+ * # Safety
+ *
+ * `size` must be a valid null-terminated C string.
+ */
+int32_t anCaptcha_set_size(const char *size);
+
+/**
  * Configures the visual theme for the captcha interface.
  *
  * # Safety

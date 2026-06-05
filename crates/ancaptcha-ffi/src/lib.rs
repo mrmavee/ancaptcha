@@ -20,7 +20,8 @@
 mod core;
 
 pub use core::config::{
-    anCaptcha_set_config, anCaptcha_set_layout, anCaptcha_set_theme, anCaptcha_warm_up,
+    anCaptcha_set_config, anCaptcha_set_layout, anCaptcha_set_size, anCaptcha_set_theme,
+    anCaptcha_warm_up,
 };
 pub use core::error::{
     anCaptcha_free_string, anCaptcha_last_error_length, anCaptcha_last_error_message,

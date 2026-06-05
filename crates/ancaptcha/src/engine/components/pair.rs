@@ -155,7 +155,7 @@ pub fn generate_pair_css(config: &mut PairConfig) -> String {
     let shadow_color = crate::common::hex_to_rgba(&text_color, 0.2);
     let _ = write!(
         css,
-        ".{modal_class}{{display:none !important;position:absolute !important;bottom:calc(100% + 10px) !important;left:50% !important;transform:translateX(-50%) !important;width:280px !important;max-width:90vw !important;background:{bg_color} !important;border-radius:4px !important;box-shadow:0 2px 10px {shadow_color} !important;padding:15px !important;z-index:1000 !important;box-sizing:border-box !important;border:1px solid {border_color} !important;}}"
+        ".{modal_class}{{display:none !important;position:absolute !important;bottom:calc(100% + 0.625em) !important;left:50% !important;transform:translateX(-50%) !important;width:17.5em !important;max-width:90vw !important;background:{bg_color} !important;border-radius:0.25em !important;box-shadow:0 0.125em 0.625em {shadow_color} !important;padding:0.9375em !important;z-index:1000 !important;box-sizing:border-box !important;border:0.0625em solid {border_color} !important;}}"
     );
 
     let ti_class = config.mapper.get_or_create("ti");
@@ -165,19 +165,19 @@ pub fn generate_pair_css(config: &mut PairConfig) -> String {
 
     let _ = write!(
         css,
-        ".{ti_class}{{font-size:16px !important;font-weight:bold !important;text-align:center !important;margin-bottom:15px !important;color:{text_color} !important;}}"
+        ".{ti_class}{{font-size:1em !important;font-weight:bold !important;text-align:center !important;margin-bottom:0.9375em !important;color:{text_color} !important;}}"
     );
     let _ = write!(
         css,
-        ".{st_i_class}{{font-size:14px !important;font-weight:bold !important;text-align:center !important;margin-bottom:15px !important;color:{text_color} !important;}}"
+        ".{st_i_class}{{font-size:0.875em !important;font-weight:bold !important;text-align:center !important;margin-bottom:0.9375em !important;color:{text_color} !important;}}"
     );
     let _ = write!(
         css,
-        ".{grid_class}{{display:grid !important;grid-template-columns:repeat(3,1fr) !important;gap:10px !important;margin-bottom:15px !important;padding:2px !important;}}"
+        ".{grid_class}{{display:grid !important;grid-template-columns:repeat(3,1fr) !important;gap:0.625em !important;margin-bottom:0.9375em !important;padding:0.125em !important;}}"
     );
     let _ = write!(
         css,
-        ".{grid_class} label{{cursor:pointer !important;border:2px solid transparent !important;border-radius:4px !important;overflow:hidden !important;transition:border-color 0.2s,transform 0.2s !important;}}"
+        ".{grid_class} label{{cursor:pointer !important;border:0.125em solid transparent !important;border-radius:0.25em !important;overflow:hidden !important;transition:border-color 0.2s,transform 0.2s !important;}}"
     );
     let _ = write!(
         css,
@@ -185,14 +185,14 @@ pub fn generate_pair_css(config: &mut PairConfig) -> String {
     );
     let _ = write!(
         css,
-        ".{grid_class} .{grid_img_class}{{width:100% !important;height:80px !important;display:block !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;background-size:300px 300px !important;}}"
+        ".{grid_class} .{grid_img_class}{{width:100% !important;height:5em !important;display:block !important;pointer-events:none !important;user-select:none !important;-webkit-user-drag:none !important;background-size:300% 300% !important;}}"
     );
 
     write_pair_sprite_css(&mut css, config);
 
     let _ = write!(
         css,
-        ".{btn_class}{{display:block !important;width:100% !important;padding:10px !important;border:none !important;border-radius:4px !important;background:{accent_color} !important;color:{bg_color} !important;font-weight:bold !important;cursor:pointer !important;text-align:center !important;text-decoration:none !important;box-sizing:border-box !important;transition:background 0.2s,transform 0.1s !important;user-select:none !important;}}"
+        ".{btn_class}{{display:block !important;width:100% !important;padding:0.625em !important;border:none !important;border-radius:0.25em !important;background:{accent_color} !important;color:{bg_color} !important;font-weight:bold !important;cursor:pointer !important;text-align:center !important;text-decoration:none !important;box-sizing:border-box !important;transition:background 0.2s,transform 0.1s !important;user-select:none !important;}}"
     );
     let _ = write!(css, ".{btn_class}:hover{{opacity:0.9 !important;}}");
     let _ = write!(
@@ -214,12 +214,12 @@ pub fn generate_pair_css(config: &mut PairConfig) -> String {
             let selection_bg = crate::common::hex_to_rgba(&accent_color, 0.1);
             let _ = write!(
                 css,
-                "#{input_id}:checked~.{step_key} .{grid_class} label[for=\"{input_id}\"]{{border-color:{accent_color} !important;background:{selection_bg} !important;box-shadow:inset 0 0 0 2px {accent_color} !important;transform:scale(0.92) !important;}}"
+                "#{input_id}:checked~.{step_key} .{grid_class} label[for=\"{input_id}\"]{{border-color:{accent_color} !important;background:{selection_bg} !important;box-shadow:inset 0 0 0 0.125em {accent_color} !important;transform:scale(0.92) !important;}}"
             );
         }
     }
 
-    let _ = write!(css, ".{nx_class}{{margin-top:10px !important;}}");
+    let _ = write!(css, ".{nx_class}{{margin-top:0.625em !important;}}");
 
     css
 }
@@ -245,12 +245,12 @@ fn write_pair_sprite_css(css: &mut String, config: &mut PairConfig) {
         for cell in 0..9_u8 {
             let col = cell % 3;
             let row = cell / 3;
-            let x_off = -i32::from(col) * 100;
-            let y_off = -i32::from(row) * 100;
+            let x_off_pct = u32::from(col) * 50;
+            let y_off_pct = u32::from(row) * 50;
             let cell_class = config.mapper.get_or_create(&format!("gc{step}_{cell}"));
             let _ = write!(
                 css,
-                ".{cell_class}{{background-position:{x_off}px {y_off}px !important;}}"
+                ".{cell_class}{{background-position:{x_off_pct}% {y_off_pct}% !important;}}"
             );
         }
     }
@@ -318,10 +318,10 @@ mod tests {
         };
 
         let css = generate_pair_css(&mut config);
-        assert!(css.contains("background-position:0px 0px"));
-        assert!(css.contains("background-position:-100px 0px"));
-        assert!(css.contains("background-position:-200px 0px"));
-        assert!(css.contains("background-position:0px -100px"));
-        assert!(css.contains("background-size:300px 300px"));
+        assert!(css.contains("background-position:0% 0%"));
+        assert!(css.contains("background-position:50% 0%"));
+        assert!(css.contains("background-position:100% 0%"));
+        assert!(css.contains("background-position:0% 50%"));
+        assert!(css.contains("background-size:300% 300%"));
     }
 }

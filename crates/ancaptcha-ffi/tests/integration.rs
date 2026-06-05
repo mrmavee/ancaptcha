@@ -1,8 +1,9 @@
 use ancaptcha_ffi::{
     Status, anCaptcha_free_string, anCaptcha_generate_pair, anCaptcha_generate_rotate,
     anCaptcha_generate_slider, anCaptcha_last_error_length, anCaptcha_last_error_message,
-    anCaptcha_set_config, anCaptcha_set_layout, anCaptcha_set_theme, anCaptcha_verify_auto,
-    anCaptcha_verify_pair, anCaptcha_verify_rotate, anCaptcha_verify_slider, anCaptcha_warm_up,
+    anCaptcha_set_config, anCaptcha_set_layout, anCaptcha_set_size, anCaptcha_set_theme,
+    anCaptcha_verify_auto, anCaptcha_verify_pair, anCaptcha_verify_rotate, anCaptcha_verify_slider,
+    anCaptcha_warm_up,
 };
 use libc::{c_char, size_t};
 use std::ffi::{CStr, CString};
@@ -31,11 +32,11 @@ fn ffi_config_flow() {
         assert_eq!(
             anCaptcha_set_theme(
                 bg.as_ptr(),
-                ptr::null(),
-                ptr::null(),
-                ptr::null(),
-                ptr::null(),
-                ptr::null()
+                bg.as_ptr(),
+                bg.as_ptr(),
+                bg.as_ptr(),
+                bg.as_ptr(),
+                bg.as_ptr()
             ),
             Status::Ok as i32
         );
@@ -44,14 +45,17 @@ fn ffi_config_flow() {
         assert_eq!(
             anCaptcha_set_layout(
                 w.as_ptr(),
-                ptr::null(),
-                ptr::null(),
-                ptr::null(),
-                ptr::null(),
-                ptr::null()
+                w.as_ptr(),
+                w.as_ptr(),
+                w.as_ptr(),
+                w.as_ptr(),
+                w.as_ptr()
             ),
             Status::Ok as i32
         );
+
+        let sz = CString::new("small").unwrap();
+        assert_eq!(anCaptcha_set_size(sz.as_ptr()), Status::Ok as i32);
     }
 }
 

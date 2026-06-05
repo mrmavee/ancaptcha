@@ -28,6 +28,7 @@ impl AnCaptcha {
             self.config.difficulty,
             &self.config.theme,
             &self.config.layout,
+            self.config.size,
             error_message,
         )
     }
@@ -41,6 +42,7 @@ impl AnCaptcha {
             self.config.difficulty,
             &self.config.theme,
             &self.config.layout,
+            self.config.size,
             error_message,
         )
     }
@@ -54,6 +56,7 @@ impl AnCaptcha {
             self.config.difficulty,
             &self.config.theme,
             &self.config.layout,
+            self.config.size,
             error_message,
         )
     }

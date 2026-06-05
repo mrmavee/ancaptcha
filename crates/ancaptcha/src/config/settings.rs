@@ -79,6 +79,30 @@ impl NoiseIntensity {
     }
 }
 
+/// Layout size profile.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Size {
+    /// Small layout.
+    Small,
+    /// Medium layout.
+    Medium,
+    #[default]
+    /// Large layout.
+    Large,
+}
+
+impl Size {
+    #[must_use]
+    /// Base font size in pixels.
+    pub const fn base_font_size(&self) -> u8 {
+        match self {
+            Self::Small => 12,
+            Self::Medium => 14,
+            Self::Large => 16,
+        }
+    }
+}
+
 /// Interface visual theme settings.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Theme {
@@ -132,11 +156,11 @@ impl Default for Layout {
     fn default() -> Self {
         Self {
             width: "100%".to_string(),
-            max_width: "400px".to_string(),
-            margin: "20px auto".to_string(),
-            min_height: "3.5rem".to_string(),
-            padding: "0.5rem 0.9rem".to_string(),
-            checkbox_size: "1.2rem".to_string(),
+            max_width: "25em".to_string(),
+            margin: "1.25em auto".to_string(),
+            min_height: "3.5em".to_string(),
+            padding: "0.5em 0.9em".to_string(),
+            checkbox_size: "1.2em".to_string(),
         }
     }
 }
@@ -156,6 +180,8 @@ pub struct Config {
     pub noise_intensity: NoiseIntensity,
     /// Active theme.
     pub theme: Theme,
+    /// Component size profile.
+    pub size: Size,
     /// Layout dimensions.
     pub layout: Layout,
 }
@@ -169,6 +195,7 @@ impl Config {
             difficulty: Difficulty::Medium,
             noise_intensity: NoiseIntensity::Medium,
             theme: Theme::default(),
+            size: Size::default(),
             layout: Layout::default(),
         }
     }
@@ -191,6 +218,13 @@ impl Config {
     /// Sets the visual theme.
     pub fn with_theme(mut self, theme: Theme) -> Self {
         self.theme = theme;
+        self
+    }
+
+    #[must_use]
+    /// Sets the layout size profile.
+    pub const fn with_size(mut self, size: Size) -> Self {
+        self.size = size;
         self
     }
 
@@ -222,5 +256,11 @@ mod tests {
     fn noise_intensity_mapping() {
         assert_eq!(NoiseIntensity::Low.jitter_amount(), 0);
         assert_eq!(NoiseIntensity::Medium.jitter_amount(), 1);
+    }
+
+    #[test]
+    fn size_mapping() {
+        assert_eq!(Size::Small.base_font_size(), 12);
+        assert_eq!(Size::Large.base_font_size(), 16);
     }
 }

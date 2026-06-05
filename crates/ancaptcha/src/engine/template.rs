@@ -52,6 +52,8 @@ pub struct CaptchaRequest<'a> {
     pub theme: &'a Theme,
     /// Layout dimensions.
     pub layout: &'a Layout,
+    /// Component size profile.
+    pub size: crate::config::Size,
     /// Challenge config.
     pub config: CaptchaConfig<'a>,
     /// Error message shown above the form.
@@ -104,6 +106,7 @@ pub fn generate_full_captcha(request: &mut CaptchaRequest) -> (String, String) {
         &initial_config.obfuscated_ids,
         request.theme,
         request.layout,
+        &request.size,
     );
 
     let (type_html, type_css) = match &request.config {
@@ -190,6 +193,7 @@ mod tests {
             difficulty: Difficulty::Medium,
             theme: &theme,
             layout: &layout,
+            size: crate::config::Size::default(),
             config: CaptchaConfig::Rotate {
                 images_base64: &["a", "b"],
                 initial_rotations: &[0, 1],
@@ -216,6 +220,7 @@ mod tests {
             difficulty: Difficulty::Medium,
             theme: &theme,
             layout: &layout,
+            size: crate::config::Size::default(),
             config: CaptchaConfig::Rotate {
                 images_base64: &["sprite_data"],
                 initial_rotations: &[0, 1],
@@ -242,6 +247,7 @@ mod tests {
             difficulty: Difficulty::Easy,
             theme: &theme,
             layout: &layout,
+            size: crate::config::Size::default(),
             config: CaptchaConfig::Slider {
                 images_base64: &["main"],
                 pieces_base64: &["piece"],
@@ -269,6 +275,7 @@ mod tests {
             difficulty: Difficulty::Easy,
             theme: &theme,
             layout: &layout,
+            size: crate::config::Size::default(),
             config: CaptchaConfig::Pair {
                 images_base64: &["sprite1"],
                 correct_pairs: &[(0, 1)],

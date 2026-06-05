@@ -26,6 +26,7 @@ pub fn generate_rotate_bundle(
     difficulty: Difficulty,
     theme: &Theme,
     layout: &Layout,
+    size: crate::config::Size,
     error_message: Option<&str>,
 ) -> Result<CaptchaBundle> {
     let cache = get_cache().ok_or(crate::AnCaptchaError::InvalidToken)?;
@@ -92,6 +93,7 @@ pub fn generate_rotate_bundle(
         difficulty,
         theme,
         layout,
+        size,
         config: CaptchaConfig::Rotate {
             images_base64: &images_refs,
             initial_rotations: &initial_rotations,
@@ -114,6 +116,7 @@ pub fn generate_slider_bundle(
     difficulty: Difficulty,
     theme: &Theme,
     layout: &Layout,
+    size: crate::config::Size,
     error_message: Option<&str>,
 ) -> Result<CaptchaBundle> {
     let cache = get_cache().ok_or(crate::AnCaptchaError::InvalidToken)?;
@@ -174,6 +177,7 @@ pub fn generate_slider_bundle(
         difficulty,
         theme,
         layout,
+        size,
         config: CaptchaConfig::Slider {
             images_base64: &images_refs,
             pieces_base64: &pieces_refs,
@@ -197,6 +201,7 @@ pub fn generate_pair_bundle(
     difficulty: Difficulty,
     theme: &Theme,
     layout: &Layout,
+    size: crate::config::Size,
     error_message: Option<&str>,
 ) -> Result<CaptchaBundle> {
     use rand::seq::SliceRandom;
@@ -283,6 +288,7 @@ pub fn generate_pair_bundle(
         difficulty,
         theme,
         layout,
+        size,
         config: CaptchaConfig::Pair {
             images_base64: &images_refs,
             correct_pairs: &pairs,

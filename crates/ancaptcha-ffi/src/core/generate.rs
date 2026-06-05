@@ -1,6 +1,6 @@
 //! C-compatible captcha bundle generation interfaces.
 
-use crate::core::config::{get_layout, get_secret, get_theme};
+use crate::core::config::{get_layout, get_secret, get_size, get_theme};
 use crate::core::error::anCaptcha_free_string;
 use crate::core::utils::{Status, catch_panic, set_error, to_c_string};
 use libc::c_char;
@@ -44,8 +44,16 @@ pub unsafe extern "C" fn anCaptcha_generate_rotate(
         let diff = map_difficulty(difficulty);
         let theme = get_theme();
         let layout = get_layout();
+        let size = get_size();
 
-        match ancaptcha::generate_rotate_bundle(secret, diff, &theme, &layout, err_str.as_deref()) {
+        match ancaptcha::generate_rotate_bundle(
+            secret,
+            diff,
+            &theme,
+            &layout,
+            size,
+            err_str.as_deref(),
+        ) {
             Ok(bundle) => {
                 let t_ptr = to_c_string(bundle.token);
                 let h_ptr = to_c_string(bundle.html);
@@ -107,8 +115,16 @@ pub unsafe extern "C" fn anCaptcha_generate_slider(
         let diff = map_difficulty(difficulty);
         let theme = get_theme();
         let layout = get_layout();
+        let size = get_size();
 
-        match ancaptcha::generate_slider_bundle(secret, diff, &theme, &layout, err_str.as_deref()) {
+        match ancaptcha::generate_slider_bundle(
+            secret,
+            diff,
+            &theme,
+            &layout,
+            size,
+            err_str.as_deref(),
+        ) {
             Ok(bundle) => {
                 let t_ptr = to_c_string(bundle.token);
                 let h_ptr = to_c_string(bundle.html);
@@ -170,8 +186,16 @@ pub unsafe extern "C" fn anCaptcha_generate_pair(
         let diff = map_difficulty(difficulty);
         let theme = get_theme();
         let layout = get_layout();
+        let size = get_size();
 
-        match ancaptcha::generate_pair_bundle(secret, diff, &theme, &layout, err_str.as_deref()) {
+        match ancaptcha::generate_pair_bundle(
+            secret,
+            diff,
+            &theme,
+            &layout,
+            size,
+            err_str.as_deref(),
+        ) {
             Ok(bundle) => {
                 let t_ptr = to_c_string(bundle.token);
                 let h_ptr = to_c_string(bundle.html);
