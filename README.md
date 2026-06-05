@@ -106,11 +106,18 @@ Default values for the `Layout` struct and `anCaptcha_set_layout`:
 | Property | Default | Description |
 |----------|---------|-------------|
 | `width` | `100%` | Container width. |
-| `max_width` | `400px` | Maximum container width. |
-| `margin` | `20px auto` | Container margin. |
-| `min_height` | `3.5rem` | Initial trigger height. |
-| `padding` | `0.5rem 0.9rem` | Container padding. |
-| `checkbox_size` | `1.2rem` | Custom checkbox dimensions. |
+| `max_width` | `25em` | Maximum container width. |
+| `margin` | `1.25em auto` | Container margin. |
+| `min_height` | `3.5em` | Initial trigger height. |
+| `padding` | `0.5em 0.9em` | Container padding. |
+| `checkbox_size` | `1.2em` | Custom checkbox dimensions. |
+
+### Component Size Profile
+| Profile | Base Font Size | Description |
+|---------|----------------|-------------|
+| `Small` | `12px` | Compact layout. |
+| `Medium` | `14px` | Standard layout. |
+| `Large` | `16px` | Large layout (Default). |
 
 ## Installation (Rust)
 
@@ -203,6 +210,11 @@ Verify the release signatures before extraction to ensure cryptographic integrit
 
 ```bash
 # 1. Import Key
+# Tor
+torsocks wget http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/certs/maverick.asc
+gpg --import maverick.asc
+
+# WKD
 gpg --locate-keys mail@mrmave.work
 
 # 2. Download Artifacts and Signatures
