@@ -3,8 +3,9 @@
 use ancaptcha_ffi::{
     anCaptcha_free_string, anCaptcha_generate_pair, anCaptcha_generate_rotate,
     anCaptcha_generate_slider, anCaptcha_last_error_length, anCaptcha_last_error_message,
-    anCaptcha_set_config, anCaptcha_set_layout, anCaptcha_set_theme, anCaptcha_verify_auto,
-    anCaptcha_verify_pair, anCaptcha_verify_rotate, anCaptcha_verify_slider, anCaptcha_warm_up,
+    anCaptcha_set_config, anCaptcha_set_layout, anCaptcha_set_size, anCaptcha_set_theme,
+    anCaptcha_verify_auto, anCaptcha_verify_pair, anCaptcha_verify_rotate, anCaptcha_verify_slider,
+    anCaptcha_warm_up,
 };
 use libfuzzer_sys::fuzz_target;
 use std::ptr;
@@ -38,6 +39,7 @@ fuzz_target!(|data: &[u8]| {
 
         let _ = anCaptcha_set_theme(c_ptr, ptr::null(), c_ptr, ptr::null(), c_ptr, ptr::null());
         let _ = anCaptcha_set_layout(ptr::null(), c_ptr, ptr::null(), c_ptr, ptr::null(), c_ptr);
+        let _ = anCaptcha_set_size(c_ptr);
 
         let mut token_ptr: *mut i8 = ptr::null_mut();
         let mut html_ptr: *mut i8 = ptr::null_mut();
