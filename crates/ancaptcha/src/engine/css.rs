@@ -75,15 +75,31 @@ fn append_trigger_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme, layo
         ".{}{{width:{cs} !important;height:{cs} !important;border:0.125em solid {bc} !important;border-radius:0.125em !important;background:{bg} !important;display:inline-block !important;flex-shrink:0 !important;margin-right:0.8em !important;position:relative !important;margin-top:0 !important;margin-bottom:0 !important;margin-left:0 !important;}}",
         ids.checkbox_inner
     );
+    let _ = write!(css, "@keyframes spin{{to{{transform:rotate(360deg);}}}}");
     let _ = write!(
         css,
-        ".{}::after{{content:'' !important;position:absolute !important;top:10% !important;left:35% !important;width:25% !important;height:55% !important;border:solid {ac} !important;border-width:0 0.1875em 0.1875em 0 !important;transform:rotate(45deg) !important;display:none !important;}}",
+        ".{}::before{{content:'' !important;position:absolute !important;top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;margin:auto !important;width:70% !important;height:70% !important;border:0.125em solid {bc} !important;border-top-color:{ac} !important;border-radius:50% !important;animation:spin 0.8s linear infinite !important;display:none !important;}}",
         ids.checkbox_inner
     );
     let _ = write!(
         css,
-        "#{}:checked+.{} .{}::after{{display:block !important;}}",
+        ".{}::after{{content:'' !important;position:absolute !important;top:45% !important;left:50% !important;width:30% !important;height:60% !important;border:solid {bg} !important;border-width:0 0.1875em 0.1875em 0 !important;transform:translate(-50%,-50%) rotate(45deg) !important;display:none !important;}}",
+        ids.checkbox_inner
+    );
+    let _ = write!(
+        css,
+        "#{}:checked~.{} .{}::before{{display:block !important;}}",
         ids.checkbox_id, ids.label_class, ids.checkbox_inner
+    );
+    let _ = write!(
+        css,
+        "#{}:checked~.{} .{}::before{{display:none !important;}}",
+        ids.completed_id, ids.label_class, ids.checkbox_inner
+    );
+    let _ = write!(
+        css,
+        "#{}:checked~.{} .{}::after{{display:block !important;}}",
+        ids.completed_id, ids.label_class, ids.checkbox_inner
     );
     let tint = crate::common::hex_to_rgba(&ac, 0.05);
     let _ = write!(
@@ -141,6 +157,11 @@ fn append_error_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme) {
         css,
         ".{}{{color:{ec} !important;font-size:0.875em !important;margin-top:0.625em !important;text-align:center !important;font-weight:600 !important;}}",
         ids.error_class
+    );
+    let _ = write!(
+        css,
+        ".{} .{} {{border-color:{ec} !important;}}",
+        ids.label_class, ids.checkbox_inner
     );
     let _ = write!(
         css,

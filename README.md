@@ -110,7 +110,7 @@ Default values for the `Layout` struct and `anCaptcha_set_layout`:
 | `margin` | `1.25em auto` | Container margin. |
 | `min_height` | `3.5em` | Initial trigger height. |
 | `padding` | `0.5em 0.9em` | Container padding. |
-| `checkbox_size` | `1.2em` | Custom checkbox dimensions. |
+| `checkbox_size` | `1.8em` | Custom checkbox dimensions. |
 
 ### Component Size Profile
 | Profile | Base Font Size | Description |

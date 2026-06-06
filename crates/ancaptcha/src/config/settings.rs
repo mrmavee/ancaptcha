@@ -160,7 +160,7 @@ impl Default for Layout {
             margin: "1.25em auto".to_string(),
             min_height: "3.5em".to_string(),
             padding: "0.5em 0.9em".to_string(),
-            checkbox_size: "1.2em".to_string(),
+            checkbox_size: "1.8em".to_string(),
         }
     }
 }
