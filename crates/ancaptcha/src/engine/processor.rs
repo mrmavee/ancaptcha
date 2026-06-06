@@ -93,6 +93,19 @@ pub fn stitch_horizontal(images: &[&[u8]], cell_w: u32, cell_h: u32) -> Option<V
     encode_rgba_jpeg(&canvas, 13)
 }
 
+#[must_use]
+pub fn rotate_image(raw: &[u8], angle: u16) -> Option<Vec<u8>> {
+    let img = image::load_from_memory(raw).ok()?;
+    let rotated = match angle {
+        90 => img.rotate90(),
+        180 => img.rotate180(),
+        270 => img.rotate270(),
+        _ => return Some(raw.to_vec()),
+    };
+    let buf = rotated.to_rgba8();
+    encode_rgba_jpeg(&buf, 13)
+}
+
 fn encode_rgba_jpeg(buf: &ImageBuffer<Rgba<u8>, Vec<u8>>, quality: u8) -> Option<Vec<u8>> {
     let mut out = std::io::Cursor::new(Vec::new());
     let enc = image::codecs::jpeg::JpegEncoder::new_with_quality(&mut out, quality);
@@ -169,5 +182,25 @@ mod tests {
         let enc = image::codecs::jpeg::JpegEncoder::new_with_quality(&mut buf, 50);
         img.write_with_encoder(enc)?;
         Ok(buf.into_inner())
+    }
+
+    #[test]
+    fn image_rotation() -> TestResult {
+        let img = DynamicImage::new_rgb8(20, 10);
+        let raw = encode_test_jpeg(&img)?;
+
+        let r90 = rotate_image(&raw, 90).ok_or("rotate 90 failed")?;
+        assert_eq!(image::load_from_memory(&r90)?.dimensions(), (10, 20));
+
+        let r180 = rotate_image(&raw, 180).ok_or("rotate 180 failed")?;
+        assert_eq!(image::load_from_memory(&r180)?.dimensions(), (20, 10));
+
+        let r270 = rotate_image(&raw, 270).ok_or("rotate 270 failed")?;
+        assert_eq!(image::load_from_memory(&r270)?.dimensions(), (10, 20));
+
+        let passthrough = rotate_image(&raw, 0).ok_or("passthrough failed")?;
+        assert_eq!(passthrough, raw);
+
+        Ok(())
     }
 }

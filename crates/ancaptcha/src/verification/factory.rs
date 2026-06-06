@@ -37,7 +37,7 @@ pub fn generate_rotate_bundle(
     let mut initial_rotations = Vec::with_capacity(steps);
     let mut correct_angles = Vec::with_capacity(steps);
 
-    let valid_angles = [45u16, 90, 135, 180, 225, 270, 315];
+    let valid_angles = [90u16, 180, 270];
 
     let mut selected_indices = Vec::with_capacity(steps);
     while selected_indices.len() < steps {
@@ -53,12 +53,14 @@ pub fn generate_rotate_bundle(
             .cloned()
             .unwrap_or_else(|| "1".to_string());
         let bin = cache.get_image(&name).unwrap_or_default();
-        raw_bins.push(bin);
 
         let angle_idx = crate::common::get_random_range(0..valid_angles.len());
-        let init = valid_angles.get(angle_idx).copied().unwrap_or(0);
-        initial_rotations.push(init);
+        let init = valid_angles.get(angle_idx).copied().unwrap_or(90);
         correct_angles.push((360 - init) % 360);
+
+        let rotated = crate::engine::rotate_image(&bin, init).unwrap_or(bin);
+        raw_bins.push(rotated);
+        initial_rotations.push(0);
     }
 
     let solution: Vec<u8> = correct_angles
