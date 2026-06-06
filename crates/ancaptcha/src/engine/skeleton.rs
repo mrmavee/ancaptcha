@@ -91,7 +91,7 @@ pub fn generate_initial_state(config: &InitialStateConfig) -> String {
 
     let _ = write!(
         html,
-        r#"<span class="{}"></span><span class="{}">I'm not a robot</span><div class="{}"><div class="{}"></div>an<span>Captcha</span></div>"#,
+        r#"<span class="{}"></span><span class="{}">I'm not a robot</span><div class="{}"><div class="{}"></div><div>an<span>Captcha</span></div></div>"#,
         ids.checkbox_inner, ids.captcha_text, ids.logo_wrapper, ids.logo_icon
     );
 

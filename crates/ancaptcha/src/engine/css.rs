@@ -132,7 +132,7 @@ fn append_brand_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme) {
     };
     let _ = write!(
         css,
-        ".{}{{margin-left:auto !important;font-family:{eff} !important;font-size:1.1em !important;color:{tc} !important;letter-spacing:-0.03em !important;display:flex !important;align-items:center !important;opacity:0.9 !important;white-space:nowrap !important;}}",
+        ".{}{{margin-left:auto !important;font-family:{eff} !important;font-size:1.1em !important;color:{tc} !important;letter-spacing:-0.03em !important;display:flex !important;flex-direction:column !important;justify-content:center !important;align-items:center !important;opacity:0.9 !important;white-space:nowrap !important;}}",
         ids.logo_wrapper
     );
     let lsh = format!(
@@ -141,8 +141,13 @@ fn append_brand_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme) {
     );
     let _ = write!(
         css,
-        ".{}{{width:1.25em !important;height:1.25em !important;border-radius:50% !important;margin-right:0.5em !important;box-shadow:{lsh} !important;flex-shrink:0 !important;opacity:0.7 !important;}}",
+        ".{}{{width:1.25em !important;height:1.25em !important;border-radius:50% !important;margin-bottom:0.15em !important;box-shadow:{lsh} !important;flex-shrink:0 !important;opacity:0.7 !important;}}",
         ids.logo_icon
+    );
+    let _ = write!(
+        css,
+        ".{} div{{font-size:0.75em !important;line-height:1 !important;opacity:0.8 !important;}}",
+        ids.logo_wrapper
     );
     let _ = write!(
         css,

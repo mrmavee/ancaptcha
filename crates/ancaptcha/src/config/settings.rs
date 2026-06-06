@@ -156,7 +156,7 @@ impl Default for Layout {
     fn default() -> Self {
         Self {
             width: "100%".to_string(),
-            max_width: "25em".to_string(),
+            max_width: "19em".to_string(),
             margin: "1.25em auto".to_string(),
             min_height: "3.5em".to_string(),
             padding: "0.5em 0.9em".to_string(),
