@@ -18,7 +18,7 @@ assets:
 build: assets
 	@cargo build --release --workspace
 
-test: env
+test: lint env
 	@cargo nextest run --all-features --workspace
 
 fuzz-lint:
