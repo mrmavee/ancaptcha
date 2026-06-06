@@ -97,7 +97,7 @@ Default values for the `Theme` struct and `anCaptcha_set_theme`:
 | `border_color` | `#d3d3d3` | Outer border color. |
 | `text_color` | `#333333` | Primary text color. |
 | `accent_color` | `#14B8A6` | Primary button/checkbox color. |
-| `error_color` | `#dc3545` | Error message and invalid state color. |
+| `error_color` | `#fb7185` | Error message and invalid state color. |
 | `font_family` | (System) | Sans-serif font stack. |
 
 ### Structural Customization (Layout)

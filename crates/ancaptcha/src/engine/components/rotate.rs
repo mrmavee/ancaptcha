@@ -128,13 +128,24 @@ fn write_rotate_step_html(
     let _ = write!(html, r#"<div class="{controls_class}">"#);
     let rot_c = config.mapper.get_or_create("rc");
     let _ = write!(html, r#"<div class="{rot_c}">"#);
+    let reset_class = config.mapper.get_or_create("rst");
     for idx in 0..8 {
         let next_idx = (idx + 1) % 8;
         let next_id = config.mapper.get_or_create(&format!("r{step}_{next_idx}"));
         let label_class = config.mapper.get_or_create(&format!("l{step}_{idx}"));
+        let reset_id = config.mapper.get_or_create(&format!("r{step}_0"));
+
+        let reset_btn = if idx > 0 {
+            format!(
+                r#"<label for="{reset_id}" class="{btn_class} {reset_class}">&#x1f5d8;</label>"#
+            )
+        } else {
+            String::new()
+        };
+
         let _ = write!(
             html,
-            r#"<label for="{next_id}" class="{label_class} {btn_class} {rt_class}">Rotate</label>"#
+            r#"<div class="{rt_class} {label_class}"><label for="{next_id}" class="{btn_class}" style="flex:1;">Rotate</label>{reset_btn}</div>"#
         );
     }
     let _ = write!(html, "</div>");
@@ -238,6 +249,12 @@ pub fn generate_rotate_css(config: &mut RotateConfig) -> String {
     let _ = write!(
         css,
         ".{controls_class} .{rt_class}{{display:none !important;}}"
+    );
+    let error_color = html_escape::encode_text(&config.theme.error_color);
+    let reset_class = config.mapper.get_or_create("rst");
+    let _ = write!(
+        css,
+        ".{reset_class}{{background:{error_color} !important; color:{bg_color} !important; border-color:{error_color} !important; flex: 0 0 auto !important; width: 2.5em !important; padding: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1.2em !important; line-height: 1 !important;}}"
     );
 
     for step in 0..steps {
@@ -350,7 +367,7 @@ fn write_rotate_step_css(css: &mut String, config: &mut RotateConfig, step: u8, 
         );
         let _ = write!(
             css,
-            "#{input_id}:checked~.{stage_class}.{step_key} .{rt_class}.{label_class} {{display:block !important;}}"
+            "#{input_id}:checked~.{stage_class}.{step_key} .{rt_class}.{label_class} {{display:flex !important; gap:0.5em !important;}}"
         );
     }
 }

@@ -127,7 +127,7 @@ impl Default for Theme {
             border_color: "#d3d3d3".to_string(),
             text_color: "#333333".to_string(),
             accent_color: "#14B8A6".to_string(),
-            error_color: "#dc3545".to_string(),
+            error_color: "#fb7185".to_string(),
             font_family:
                 "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif"
                     .to_string(),

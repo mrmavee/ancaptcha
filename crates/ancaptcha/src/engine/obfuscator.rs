@@ -84,77 +84,99 @@ impl NameMapper {
         }
 
         match captcha_type {
-            crate::common::CAPTCHA_TYPE_ROTATE => {
-                let _ = self.get_or_create("modal");
-                let _ = self.get_or_create("btn");
-                let _ = self.get_or_create("stage");
-                let _ = self.get_or_create("ctrl");
-                let _ = self.get_or_create("ir-w");
-                let _ = self.get_or_create("st");
-                for i in 0..steps {
-                    let _ = self.get_or_create(&format!("st{i}"));
-                    let _ = self.get_or_create(&format!("st_v{i}"));
-                }
-                for i in 0..steps {
-                    let _ = self.get_or_create(&format!("s{i}"));
-                    for j in 0..8 {
-                        let _ = self.get_or_create(&format!("r{i}_{j}"));
-                        let _ = self.get_or_create(&format!("v{j}"));
-                    }
-                }
-                for i in 0..steps {
-                    let _ = self.get_or_create(&format!("ir{i}"));
-                    let _ = self.get_or_create(&format!("img{i}"));
-                }
-                let _ = self.get_or_create("rc");
-                for i in 0..steps {
-                    for j in 0..8 {
-                        let _ = self.get_or_create(&format!("l{i}_{j}"));
-                    }
-                }
-                let _ = self.get_or_create("nc");
-                let _ = self.get_or_create("ispr");
-            }
-            crate::common::CAPTCHA_TYPE_SLIDER => {
-                let _ = self.get_or_create("modal");
-                let _ = self.get_or_create("btn");
-                let _ = self.get_or_create("stage");
-                let _ = self.get_or_create("track");
-                let _ = self.get_or_create("st");
-                for i in 0..steps {
-                    let _ = self.get_or_create(&format!("st{i}"));
-                    let _ = self.get_or_create(&format!("st_v{i}"));
-                }
-                for i in 0..steps {
-                    let _ = self.get_or_create(&format!("s{i}"));
-                    for j in 0..20 {
-                        let _ = self.get_or_create(&format!("s{i}_{j}"));
-                        let _ = self.get_or_create(&format!("p{j}"));
-                    }
-                }
-                let _ = self.get_or_create("nc");
-            }
-            crate::common::CAPTCHA_TYPE_PAIR => {
-                let _ = self.get_or_create("modal");
-                let _ = self.get_or_create("grid");
-                let _ = self.get_or_create("btn");
-                let _ = self.get_or_create("stage");
-                let _ = self.get_or_create("pst");
-                for i in 0..steps {
-                    let _ = self.get_or_create(&format!("pst{i}"));
-                    let _ = self.get_or_create(&format!("pst_v{i}"));
-                }
-                for i in 0..steps {
-                    for j in 0..9 {
-                        let _ = self.get_or_create(&format!("g{i}_{j}"));
-                        let _ = self.get_or_create(&format!("s{i}_{j}"));
-                        let _ = self.get_or_create(&format!("c{j}"));
-                        let _ = self.get_or_create(&format!("gc{i}_{j}"));
-                    }
-                }
-            }
+            crate::common::CAPTCHA_TYPE_ROTATE => self.warm_up_rotate(steps),
+            crate::common::CAPTCHA_TYPE_SLIDER => self.warm_up_slider(steps),
+            crate::common::CAPTCHA_TYPE_PAIR => self.warm_up_pair(steps),
             _ => {}
         }
+    }
+
+    fn warm_up_rotate(&mut self, steps: u8) {
+        let _ = self.get_or_create("modal");
+        let _ = self.get_or_create("btn");
+        let _ = self.get_or_create("stage");
+        let _ = self.get_or_create("ctrl");
+        let _ = self.get_or_create("ir-w");
+        let _ = self.get_or_create("st");
+        for i in 0..steps {
+            let _ = self.get_or_create(&format!("st{i}"));
+            let _ = self.get_or_create(&format!("st_v{i}"));
+        }
+        for i in 0..steps {
+            let _ = self.get_or_create(&format!("s{i}"));
+            for j in 0..8 {
+                let _ = self.get_or_create(&format!("r{i}_{j}"));
+                let _ = self.get_or_create(&format!("v{j}"));
+            }
+        }
+        for i in 0..steps {
+            let _ = self.get_or_create(&format!("ir{i}"));
+            let _ = self.get_or_create(&format!("img{i}"));
+        }
+        let _ = self.get_or_create("rc");
+        for i in 0..steps {
+            for j in 0..8 {
+                let _ = self.get_or_create(&format!("l{i}_{j}"));
+            }
+        }
+        let _ = self.get_or_create("nc");
+        let _ = self.get_or_create("ispr");
+        let _ = self.get_or_create("ti");
+        let _ = self.get_or_create("im-w");
+        let _ = self.get_or_create("st-i");
+        let _ = self.get_or_create("rt");
+        let _ = self.get_or_create("nx");
+        let _ = self.get_or_create("rst");
+    }
+
+    fn warm_up_slider(&mut self, steps: u8) {
+        let _ = self.get_or_create("modal");
+        let _ = self.get_or_create("btn");
+        let _ = self.get_or_create("stage");
+        let _ = self.get_or_create("track");
+        let _ = self.get_or_create("st");
+        for i in 0..steps {
+            let _ = self.get_or_create(&format!("st{i}"));
+            let _ = self.get_or_create(&format!("st_v{i}"));
+        }
+        for i in 0..steps {
+            let _ = self.get_or_create(&format!("s{i}"));
+            for j in 0..20 {
+                let _ = self.get_or_create(&format!("s{i}_{j}"));
+                let _ = self.get_or_create(&format!("p{j}"));
+            }
+        }
+        let _ = self.get_or_create("nc");
+        let _ = self.get_or_create("ti");
+        let _ = self.get_or_create("im-w");
+        let _ = self.get_or_create("st-i");
+        let _ = self.get_or_create("main-img");
+        let _ = self.get_or_create("piece-img");
+        let _ = self.get_or_create("nx");
+    }
+
+    fn warm_up_pair(&mut self, steps: u8) {
+        let _ = self.get_or_create("modal");
+        let _ = self.get_or_create("grid");
+        let _ = self.get_or_create("btn");
+        let _ = self.get_or_create("stage");
+        let _ = self.get_or_create("pst");
+        for i in 0..steps {
+            let _ = self.get_or_create(&format!("pst{i}"));
+            let _ = self.get_or_create(&format!("pst_v{i}"));
+        }
+        for i in 0..steps {
+            for j in 0..9 {
+                let _ = self.get_or_create(&format!("g{i}_{j}"));
+                let _ = self.get_or_create(&format!("s{i}_{j}"));
+                let _ = self.get_or_create(&format!("c{j}"));
+                let _ = self.get_or_create(&format!("gc{i}_{j}"));
+            }
+        }
+        let _ = self.get_or_create("ti");
+        let _ = self.get_or_create("st-i");
+        let _ = self.get_or_create("grid-img");
+        let _ = self.get_or_create("nx");
     }
 }
 
