@@ -136,9 +136,7 @@ fn write_rotate_step_html(
         let reset_id = config.mapper.get_or_create(&format!("r{step}_0"));
 
         let reset_btn = if idx > 0 {
-            format!(
-                r#"<label for="{reset_id}" class="{btn_class} {reset_class}">&#x1f5d8;</label>"#
-            )
+            format!(r#"<label for="{reset_id}" class="{btn_class} {reset_class}">&#x21bb;</label>"#)
         } else {
             String::new()
         };
