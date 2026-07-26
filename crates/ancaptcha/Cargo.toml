@@ -12,16 +12,16 @@ categories = ["web-programming", "security"]
 include = ["src/**/*", "assets/default_images/**/*", "tests/**/*", "build.rs", "Cargo.toml", "README.md"]
 
 [dependencies]
-base64 = "0.22.1"
-bincode-next = "2.1.0"
-chacha20poly1305 = "0.10.1"
-html-escape = "0.2.13"
+base64 = "0.23.0"
+bincode-next = "3.1.1"
+chacha20poly1305 = "0.11.0"
+html-escape = "0.2.14"
 image = { version = "0.25.10", default-features = false, features = ["jpeg", "webp"] }
-rand = "0.10.1"
+rand = "0.10.2"
 rayon = "1.12.0"
-serde = { version = "1.0.228", features = ["derive"] }
+serde = { version = "1.0.229", features = ["derive"] }
 subtle = "2.6.1"
-thiserror = "2.0.18"
+thiserror = "2.0.19"
 
 [build-dependencies]
 image = { version = "0.25.10", default-features = false, features = ["jpeg", "webp"] }

@@ -26,32 +26,10 @@ highlight = "all"
 allow = []
 deny = []
 skip = [
-    # Multiple versions of chacha20 and its dependencies are pulled by different
-    # versions of rand and chacha20poly1305.
-    { name = "chacha20", version = "0.9.1" },
-    { name = "chacha20", version = "0.10.0" },
-    { name = "cpufeatures", version = "0.2.17" },
-    { name = "cpufeatures", version = "0.3.0" },
-
-    # getrandom versions vary between libfuzzer-sys, rand, and transitive dependencies.
-    { name = "getrandom", version = "0.2.17" },
-    { name = "getrandom", version = "0.3.4" },
-    { name = "getrandom", version = "0.4.2" },
-
-    # rand_core follows the distribution of getrandom across different toolchains.
-    { name = "rand_core", version = "0.6.4" },
-    { name = "rand_core", version = "0.10.1" },
-
-    # wit-bindgen is pulled as a transitive dependency by wasip2/3 via getrandom.
-    { name = "wit-bindgen", version = "0.51.0" },
-    { name = "wit-bindgen", version = "0.57.1" },
-
-    # r-efi and winnow are pulled as transitive dependencies by different versions of
-    # toolchains like cbindgen and its TOML parsers.
-    { name = "r-efi", version = "5.3.0" },
-    { name = "r-efi", version = "6.0.0" },
+    { name = "syn", version = "2.0.119" },
+    { name = "syn", version = "3.0.3" },
     { name = "winnow", version = "0.7.15" },
-    { name = "winnow", version = "1.0.2" },
+    { name = "winnow", version = "1.0.4" },
 ]
 skip-tree = []
 
