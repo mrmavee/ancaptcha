@@ -1,9 +1,7 @@
 //! Authenticated encryption primitives using ChaCha20-Poly1305.
 
-use chacha20poly1305::{
-    ChaCha20Poly1305, KeyInit, Nonce,
-    aead::{Aead, OsRng, rand_core::RngCore},
-};
+use chacha20poly1305::{ChaCha20Poly1305, KeyInit, Nonce, aead::Aead};
+use rand::Rng;
 
 use crate::common::Secret;
 use crate::common::error::{AnCaptchaError, Result};
@@ -19,10 +17,10 @@ pub fn encrypt(secret: &Secret, plaintext: &[u8]) -> Result<Vec<u8>> {
     let cipher = ChaCha20Poly1305::new(secret.into());
 
     let mut nonce_bytes = [0u8; NONCE_SIZE];
-    OsRng.fill_bytes(&mut nonce_bytes);
-    let nonce = Nonce::from_slice(&nonce_bytes);
+    rand::rng().fill_bytes(&mut nonce_bytes);
+    let nonce = Nonce::from(nonce_bytes);
 
-    let ciphertext = cipher.encrypt(nonce, plaintext)?;
+    let ciphertext = cipher.encrypt(&nonce, plaintext)?;
 
     let mut result = Vec::with_capacity(NONCE_SIZE + ciphertext.len());
     result.extend_from_slice(&nonce_bytes);
@@ -42,10 +40,10 @@ pub fn decrypt(secret: &Secret, data: &[u8]) -> Result<Vec<u8>> {
     }
 
     let (nonce_bytes, ciphertext) = data.split_at(NONCE_SIZE);
-    let nonce = Nonce::from_slice(nonce_bytes);
+    let nonce = Nonce::try_from(nonce_bytes).map_err(|_| AnCaptchaError::InvalidToken)?;
 
     let cipher = ChaCha20Poly1305::new(secret.into());
-    Ok(cipher.decrypt(nonce, ciphertext)?)
+    Ok(cipher.decrypt(&nonce, ciphertext)?)
 }
 
 #[cfg(test)]
