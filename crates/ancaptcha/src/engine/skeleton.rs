@@ -83,19 +83,15 @@ pub fn generate_initial_state(config: &InitialStateConfig) -> String {
         ids.completed_id, ids.hidden_class
     );
 
-    let _ = write!(
-        html,
-        r#"<label for="{}" class="{}">"#,
-        ids.checkbox_id, ids.label_class
-    );
+    let _ = write!(html, r#"<div class="{}">"#, ids.label_class);
 
     let _ = write!(
         html,
-        r#"<span class="{}"></span><span class="{}">I'm not a robot</span><div class="{}"><div class="{}"></div><div>an<span>Captcha</span></div></div>"#,
-        ids.checkbox_inner, ids.captcha_text, ids.logo_wrapper, ids.logo_icon
+        r#"<label for="{}" class="{}"></label><span class="{}">I'm not a robot</span><a href="https://git.mrmave.work/maverick/ancaptcha" target="_blank" rel="noopener noreferrer" class="{}"><div class="{}"></div><div>an<span>Captcha</span></div></a>"#,
+        ids.checkbox_id, ids.checkbox_inner, ids.captcha_text, ids.logo_wrapper, ids.logo_icon
     );
 
-    let _ = write!(html, r"</label>");
+    let _ = write!(html, r"</div>");
 
     html
 }

@@ -54,7 +54,7 @@ fn append_trigger_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme, layo
 
     let _ = write!(
         css,
-        ".{}{{display:flex !important;align-items:center !important;border:0.0625em solid {bc} !important;border-radius:0.1875em !important;padding:{p} !important;background:{bg} !important;cursor:pointer !important;min-height:{h} !important;box-sizing:border-box !important;transition:border-color 0.2s,box-shadow 0.2s !important;width:100% !important;}}",
+        ".{}{{display:flex !important;align-items:center !important;border:0.0625em solid {bc} !important;border-radius:0.1875em !important;padding:{p} !important;background:{bg} !important;min-height:{h} !important;box-sizing:border-box !important;transition:border-color 0.2s,box-shadow 0.2s !important;width:100% !important;}}",
         ids.label_class
     );
     let _ = write!(
@@ -72,7 +72,12 @@ fn append_trigger_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme, layo
 
     let _ = write!(
         css,
-        ".{}{{width:{cs} !important;height:{cs} !important;border:0.125em solid {bc} !important;border-radius:0.125em !important;background:{bg} !important;display:inline-block !important;flex-shrink:0 !important;margin-right:0.8em !important;position:relative !important;margin-top:0 !important;margin-bottom:0 !important;margin-left:0 !important;}}",
+        ".{}{{width:{cs} !important;height:{cs} !important;border:0.125em solid {bc} !important;border-radius:0.125em !important;background:{bg} !important;display:inline-block !important;flex-shrink:0 !important;margin-right:0.8em !important;position:relative !important;margin-top:0 !important;margin-bottom:0 !important;margin-left:0 !important;cursor:pointer !important;transition:border-color 0.2s !important;}}",
+        ids.checkbox_inner
+    );
+    let _ = write!(
+        css,
+        ".{}:hover{{border-color:{ac} !important;}}",
         ids.checkbox_inner
     );
     let _ = write!(css, "@keyframes spin{{to{{transform:rotate(360deg);}}}}");
@@ -122,7 +127,7 @@ fn append_brand_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme) {
 
     let _ = write!(
         css,
-        ".{}{{flex-grow:1 !important;font-size:0.95em !important;color:{tc} !important;font-weight:600 !important;line-height:1.2 !important;margin-top:0.1em !important;}}",
+        ".{}{{flex-grow:1 !important;font-size:0.95em !important;color:{tc} !important;font-weight:600 !important;line-height:1.2 !important;margin-top:0.1em !important;user-select:none !important;}}",
         ids.captcha_text
     );
     let eff = if ff.is_empty() {
@@ -132,21 +137,27 @@ fn append_brand_css(css: &mut String, ids: &ObfuscatedIds, theme: &Theme) {
     };
     let _ = write!(
         css,
-        ".{}{{margin-left:auto !important;font-family:{eff} !important;font-size:1.1em !important;color:{tc} !important;letter-spacing:-0.03em !important;display:flex !important;flex-direction:column !important;justify-content:center !important;align-items:center !important;opacity:0.9 !important;white-space:nowrap !important;}}",
+        ".{}{{margin-left:auto !important;font-family:{eff} !important;font-size:1.1em !important;color:{tc} !important;letter-spacing:-0.03em !important;display:flex !important;flex-direction:column !important;justify-content:center !important;align-items:center !important;opacity:0.8 !important;white-space:nowrap !important;text-decoration:none !important;cursor:pointer !important;transition:opacity 0.2s !important;}}",
         ids.logo_wrapper
     );
+    let _ = write!(css, ".{}:hover{{opacity:1 !important;}}", ids.logo_wrapper);
     let lsh = format!(
         "inset 0 0 0 0.1875em {ac},inset 0 0 0 0.3125em {bg},inset 0 0 0 0.4375em {}",
         crate::common::hex_to_rgba(&ac, 0.3)
     );
     let _ = write!(
         css,
-        ".{}{{width:1.25em !important;height:1.25em !important;border-radius:50% !important;margin-bottom:0.15em !important;box-shadow:{lsh} !important;flex-shrink:0 !important;opacity:0.7 !important;}}",
+        ".{}{{width:1.25em !important;height:1.25em !important;border-radius:50% !important;margin-bottom:0.15em !important;box-shadow:{lsh} !important;flex-shrink:0 !important;opacity:0.7 !important;transition:opacity 0.2s,transform 0.2s !important;}}",
         ids.logo_icon
     );
     let _ = write!(
         css,
-        ".{} div{{font-size:0.75em !important;line-height:1 !important;opacity:0.8 !important;}}",
+        ".{}:hover .{}{{opacity:1 !important;transform:scale(1.05) !important;}}",
+        ids.logo_wrapper, ids.logo_icon
+    );
+    let _ = write!(
+        css,
+        ".{} div{{font-size:0.75em !important;line-height:1 !important;opacity:0.8 !important;color:{tc} !important;}}",
         ids.logo_wrapper
     );
     let _ = write!(
