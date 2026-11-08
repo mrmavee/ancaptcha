@@ -12,7 +12,7 @@ cargo-fuzz = true
 [dependencies]
 ancaptcha = { version = "0.4.1", path = "../crates/ancaptcha" }
 ancaptcha-ffi = { version = "0.4.1", path = "../crates/ancaptcha-ffi" }
-arbitrary = { version = "1.4.2", features = ["derive"] }
+arbitrary = { version = "1.5.0", features = ["derive"] }
 libfuzzer-sys = "0.4"
 
 [[bin]]
