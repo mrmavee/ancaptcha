@@ -179,29 +179,29 @@ Extract the FFI library and header, then download the wrapper for your language.
 
 **Go**
 ```bash
-wget -qO- https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.1/ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz | tar -xz --strip-components=1 ancaptcha-ffi-v0.4.1-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.1-linux-x86_64/ancaptcha-ffi.h && wget -q https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/go/ancaptcha/ancaptcha.go
+wget -qO- https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.2/ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz | tar -xz --strip-components=1 ancaptcha-ffi-v0.4.2-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.2-linux-x86_64/ancaptcha-ffi.h && wget -q https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/go/ancaptcha/ancaptcha.go
 ```
 **Go (Tor)**
 ```bash
-torsocks wget -qO- http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz | torsocks tar -xz --strip-components=1 ancaptcha-ffi-v0.4.1-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.1-linux-x86_64/ancaptcha-ffi.h && torsocks wget -q http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/examples/go/ancaptcha/ancaptcha.go
+torsocks wget -qO- http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz | torsocks tar -xz --strip-components=1 ancaptcha-ffi-v0.4.2-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.2-linux-x86_64/ancaptcha-ffi.h && torsocks wget -q http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/examples/go/ancaptcha/ancaptcha.go
 ```
 
 **Python**
 ```bash
-wget -qO- https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.1/ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz | tar -xz --strip-components=1 ancaptcha-ffi-v0.4.1-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.1-linux-x86_64/ancaptcha-ffi.h && wget -q https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/python/ancaptcha.py
+wget -qO- https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.2/ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz | tar -xz --strip-components=1 ancaptcha-ffi-v0.4.2-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.2-linux-x86_64/ancaptcha-ffi.h && wget -q https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/python/ancaptcha.py
 ```
 **Python (Tor)**
 ```bash
-torsocks wget -qO- http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz | torsocks tar -xz --strip-components=1 ancaptcha-ffi-v0.4.1-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.1-linux-x86_64/ancaptcha-ffi.h && torsocks wget -q http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/examples/python/ancaptcha.py
+torsocks wget -qO- http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz | torsocks tar -xz --strip-components=1 ancaptcha-ffi-v0.4.2-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.2-linux-x86_64/ancaptcha-ffi.h && torsocks wget -q http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/examples/python/ancaptcha.py
 ```
 
 **PHP**
 ```bash
-wget -qO- https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.1/ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz | tar -xz --strip-components=1 ancaptcha-ffi-v0.4.1-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.1-linux-x86_64/ancaptcha-ffi.h && wget -q https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/php/AnCaptcha.php
+wget -qO- https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.2/ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz | tar -xz --strip-components=1 ancaptcha-ffi-v0.4.2-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.2-linux-x86_64/ancaptcha-ffi.h && wget -q https://git.mrmave.work/maverick/ancaptcha/raw/branch/main/examples/php/AnCaptcha.php
 ```
 **PHP (Tor)**
 ```bash
-torsocks wget -qO- http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz | torsocks tar -xz --strip-components=1 ancaptcha-ffi-v0.4.1-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.1-linux-x86_64/ancaptcha-ffi.h && torsocks wget -q http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/examples/php/AnCaptcha.php
+torsocks wget -qO- http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz | torsocks tar -xz --strip-components=1 ancaptcha-ffi-v0.4.2-linux-x86_64/libancaptcha_ffi.so ancaptcha-ffi-v0.4.2-linux-x86_64/ancaptcha-ffi.h && torsocks wget -q http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/examples/php/AnCaptcha.php
 ```
 
 ### 2. Manual Verification (Recommended)
@@ -218,16 +218,16 @@ gpg --import maverick.asc
 gpg --locate-keys mail@mrmave.work
 
 # 2. Download Artifacts and Signatures
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.1/ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.1/ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz.sha256
-wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.1/ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz.asc
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.2/ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.2/ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz.sha256
+wget https://git.mrmave.work/maverick/ancaptcha/releases/download/v0.4.2/ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz.asc
 
 # 3. Verify
-sha256sum -c ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz.sha256
-gpg --verify ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz.asc ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz
+sha256sum -c ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz.sha256
+gpg --verify ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz.asc ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz
 
 # 4. Extract
-tar -xzf ancaptcha-ffi-v0.4.1-linux-x86_64.tar.gz
+tar -xzf ancaptcha-ffi-v0.4.2-linux-x86_64.tar.gz
 ```
 
 *(Note: If accessing via Tor, use `torsocks` and replace the base URL with `http://mavegitwskioz7tpppmjtj7fn24pwezciii3nvc7kdyltn5iu5uakfqd.onion/ancaptcha/plain/dist/` for all artifacts and signatures).*

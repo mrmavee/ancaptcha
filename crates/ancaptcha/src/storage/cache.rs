@@ -406,7 +406,7 @@ mod tests {
     fn cache_init() {
         let cache = init_cache();
         let names = cache.all_image_names();
-        assert!(!names.is_empty());
+        assert_ne!(names, [] as [String; 0]);
     }
 
     #[test]

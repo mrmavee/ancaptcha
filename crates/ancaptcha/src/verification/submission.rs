@@ -259,14 +259,14 @@ mod tests {
     fn submission_missing_fields() {
         let map = HashMap::new();
         let sub = RotateSubmission::from_map(&map);
-        assert!(sub.token.is_empty());
+        assert_eq!(sub.token, "");
         assert!(sub.s0.is_none());
 
         let slider = SliderSubmission::from_map(&map);
-        assert!(slider.token.is_empty());
+        assert_eq!(slider.token, "");
 
         let pair = PairSubmission::from_map(&map);
-        assert!(pair.s0.is_empty());
+        assert_eq!(pair.s0, [] as [String; 0]);
     }
 
     #[test]

@@ -203,7 +203,7 @@ mod tests {
         };
 
         let (html, css) = generate_full_captcha(&mut request);
-        assert!(css.is_empty());
+        assert_eq!(css, "");
         assert!(html.contains("<style>"));
         assert!(html.contains("data:image/jpeg;base64,a"));
         assert!(html.contains("data:image/jpeg;base64,b"));
@@ -230,7 +230,7 @@ mod tests {
         };
 
         let (html, css) = generate_full_captcha(&mut request);
-        assert!(css.is_empty());
+        assert_eq!(css, "");
         assert!(html.contains("<style>"));
         assert!(html.contains("data:image/jpeg;base64,sprite_data"));
         assert!(html.contains("background-position"));
@@ -257,7 +257,7 @@ mod tests {
         };
 
         let (html, css) = generate_full_captcha(&mut request);
-        assert!(css.is_empty());
+        assert_eq!(css, "");
         assert!(html.contains("<style>"));
         assert!(html.contains("data:image/jpeg;base64,main"));
         assert!(html.contains("data:image/jpeg;base64,piece"));
@@ -284,7 +284,7 @@ mod tests {
         };
 
         let (html, css) = generate_full_captcha(&mut request);
-        assert!(css.is_empty());
+        assert_eq!(css, "");
         assert!(html.contains("<style>"));
         assert!(html.contains("data:image/jpeg;base64,sprite1"));
         assert!(html.contains("display:grid"));

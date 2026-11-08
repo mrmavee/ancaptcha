@@ -24,11 +24,11 @@ mod tests {
     #[test]
     fn embedded_assets_presence() {
         let assets = get_embedded_assets();
-        assert!(!assets.is_empty());
+        assert_ne!(assets, []);
 
         for (name, data) in assets {
-            assert!(!name.is_empty());
-            assert!(!data.is_empty());
+            assert_ne!(*name, "");
+            assert_ne!(*data, []);
         }
     }
 

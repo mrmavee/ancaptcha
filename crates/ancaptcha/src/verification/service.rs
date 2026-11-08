@@ -135,15 +135,15 @@ mod tests {
         let ac = AnCaptcha::new(config);
 
         let rotate = ac.generate_rotate(None)?;
-        assert!(!rotate.token.is_empty());
+        assert_ne!(rotate.token, "");
         assert!(rotate.html.contains("ROTATE THE PIC"));
 
         let slider = ac.generate_slider(None)?;
-        assert!(!slider.token.is_empty());
+        assert_ne!(slider.token, "");
         assert!(slider.html.contains("CLICK SLIDER TO ALIGN"));
 
         let pair = ac.generate_pair(None)?;
-        assert!(!pair.token.is_empty());
+        assert_ne!(pair.token, "");
         assert!(pair.html.contains("FIND THE PAIR"));
         Ok(())
     }
